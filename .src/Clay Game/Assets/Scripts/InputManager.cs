@@ -80,4 +80,22 @@ public class InputManager : MonoBehaviour {
 		set{_XDown = value;}
 	}
 
+	public void Reset()
+	{
+		StartCoroutine (Wait(0.5f));
+		_XDown = false;
+		_BDown = false;
+		_ADown = false;
+		_leftDown = false;
+		_rightDown = false;
+		_upDown = false;
+		_downDown = false;
+		StopCoroutine ("Wait");
+	}
+
+	public IEnumerator Wait(float duration)
+	{
+		yield return new WaitForSeconds (1);
+	}
+
 }
