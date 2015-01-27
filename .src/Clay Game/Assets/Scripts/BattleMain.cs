@@ -6,9 +6,15 @@ public class BattleMain : MonoBehaviour {
 
 
 	}
+
+	[SerializeField]
+	GameObject mobileButtons;
 	// Use this for initialization
 	void Start () {
-	
+		if (Application.platform == RuntimePlatform.Android)
+			mobileButtons.SetActive(true);
+		else
+			mobileButtons.SetActive(false);
 	}
 	
 	// Update is called once per frame

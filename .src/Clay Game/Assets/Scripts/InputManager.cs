@@ -9,7 +9,15 @@ public class InputManager : MonoBehaviour {
 		get{
 			if(Input.GetKeyDown(KeyCode.LeftArrow))
 				return true;
-			return _leftDown;
+			if(_leftDown)
+			{
+				_leftDown = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		set{_leftDown = value;}
 	}
@@ -20,7 +28,15 @@ public class InputManager : MonoBehaviour {
 		get{
 			if(Input.GetKeyDown(KeyCode.RightArrow))
 				return true;
-			return _rightDown;
+			if(_rightDown)
+			{
+				_rightDown = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		set{_rightDown = value;}
 	}
@@ -31,7 +47,15 @@ public class InputManager : MonoBehaviour {
 		get{
 			if(Input.GetKeyDown(KeyCode.DownArrow))
 				return true;
-			return _downDown;
+			if(_downDown)
+			{
+				_downDown = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		set{_downDown = value;}
 	}
@@ -42,7 +66,15 @@ public class InputManager : MonoBehaviour {
 		get{
 			if(Input.GetKeyDown(KeyCode.UpArrow))
 				return true;
-			return _upDown;
+			if(_upDown)
+			{
+				_upDown = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		set{_upDown = value;}
 	}
@@ -53,7 +85,15 @@ public class InputManager : MonoBehaviour {
 		get{
 			if(Input.GetKeyDown(KeyCode.X))
 				return true;
-			return _ADown;
+			if(_ADown)
+			{
+				_ADown = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		set{_ADown = value;}
 	}
@@ -64,7 +104,15 @@ public class InputManager : MonoBehaviour {
 		get{
 			if(Input.GetKeyDown(KeyCode.C))
 				return true;
-			return _BDown;
+			if(_BDown)
+			{
+				_BDown = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		set{_BDown = value;}
 	}
@@ -75,27 +123,24 @@ public class InputManager : MonoBehaviour {
 		get{
 			if(Input.GetKeyDown(KeyCode.V))
 				return true;
-			return _XDown;
+			if(_XDown)
+			{
+				_XDown = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		set{_XDown = value;}
 	}
 
-	public void Reset()
-	{
-		StartCoroutine (Wait(0.5f));
-		_XDown = false;
-		_BDown = false;
-		_ADown = false;
-		_leftDown = false;
-		_rightDown = false;
-		_upDown = false;
-		_downDown = false;
-		StopCoroutine ("Wait");
-	}
-
 	public IEnumerator Wait(float duration)
 	{
-		yield return new WaitForSeconds (1);
+		print(Time.time);
+		yield return new WaitForSeconds (duration);
+		print(Time.time);
 	}
 
 }
