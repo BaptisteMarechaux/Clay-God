@@ -3,49 +3,81 @@ using System.Collections;
 
 public class InputManager : MonoBehaviour {
 
+	bool _leftDown;
 	public bool leftDown
 	{
-		get{return Input.GetKeyDown(KeyCode.LeftArrow);}
+		get{
+			if(Input.GetKeyDown(KeyCode.LeftArrow))
+				return true;
+			return _leftDown;
+		}
+		set{_leftDown = value;}
 	}
 
+	bool _rightDown;
 	public bool rightDown
 	{
-		get{return Input.GetKeyDown(KeyCode.RightArrow);}
+		get{
+			if(Input.GetKeyDown(KeyCode.RightArrow))
+				return true;
+			return _rightDown;
+		}
+		set{_rightDown = value;}
 	}
 
+	bool _downDown;
 	public bool downDown
 	{
-		get{return Input.GetKeyDown(KeyCode.DownArrow);}
+		get{
+			if(Input.GetKeyDown(KeyCode.DownArrow))
+				return true;
+			return _downDown;
+		}
+		set{_downDown = value;}
 	}
 
+	bool _upDown;
 	public bool upDown
 	{
-		get{return Input.GetKeyDown(KeyCode.UpArrow);}
+		get{
+			if(Input.GetKeyDown(KeyCode.UpArrow))
+				return true;
+			return _upDown;
+		}
+		set{_upDown = value;}
 	}
 
+	bool _ADown;
 	public bool Adown
 	{
-		get{return Input.GetKeyDown(KeyCode.X);}
+		get{
+			if(Input.GetKeyDown(KeyCode.X))
+				return true;
+			return _ADown;
+		}
+		set{_ADown = value;}
 	}
 
+	bool _BDown;
 	public bool Bdown
 	{
-		get{return Input.GetKeyDown(KeyCode.C);}
+		get{
+			if(Input.GetKeyDown(KeyCode.C))
+				return true;
+			return _BDown;
+		}
+		set{_BDown = value;}
 	}
 
+	bool _XDown;
 	public bool Xdown
 	{
-		get{return Input.GetKeyDown(KeyCode.V);}
+		get{
+			if(Input.GetKeyDown(KeyCode.V))
+				return true;
+			return _XDown;
+		}
+		set{_XDown = value;}
 	}
 
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
 }

@@ -9,8 +9,8 @@ public class CursorMovement : MonoBehaviour {
 	private GameObject mvtObj;
 	[SerializeField]
 	private GameObject rangeObj;
-	public bool canSelect;
-	public bool charSelected;
+	private bool canSelect;
+	private bool charSelected;
 	private bool hover;
 	private Transform selectedCharTransform;
 	private CharacterStats hoverCharacter;
