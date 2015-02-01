@@ -3,8 +3,15 @@ using System.Collections;
 
 public abstract class BattleEntity : MonoBehaviour {
 	protected int hp;
+	[SerializeField]
 	protected int hpMax;
+	[SerializeField]
 	protected int nickname;
+
+	public virtual void Start()
+	{
+		hp = hpMax;
+	}
 
 	public virtual void ChangeHP(int amount)
 	{
