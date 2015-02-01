@@ -1,17 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour {
+	[SerializeField]
+	private Transform curs1;
+	[SerializeField]
+	private Transform curs2;
 
-	bool _leftDown;
-	public bool leftDown
+	class sPlayerIntents
+	{
+		public bool wantUpDown;
+		public bool wantLeftDown;
+		public bool wantRightDown;
+		public bool wantDownDown;
+		public bool wantADown;
+		public bool wantBDown;
+		public bool wantXDown;
+		public bool wantYDown;
+	}
+
+	private Dictionary<NetworkPlayer, sPlayerIntents> playerIntents;
+	private Dictionary<NetworkPlayer, sPlayerIntents> PlayerIntents
+	{
+		get{return playerIntents;}
+		set{playerIntents = value;}
+	}
+
+	private NetworkView myNetworkView = null;
+
+	bool leftDown;
+	public bool LeftDown
 	{
 		get{
 			if(Input.GetKeyDown(KeyCode.LeftArrow))
 				return true;
-			if(_leftDown)
+			if(leftDown)
 			{
-				_leftDown = false;
+				leftDown = false;
 				return true;
 			}
 			else
@@ -19,18 +45,18 @@ public class InputManager : MonoBehaviour {
 				return false;
 			}
 		}
-		set{_leftDown = value;}
+		set{leftDown = value;}
 	}
 
-	bool _rightDown;
-	public bool rightDown
+	bool rightDown;
+	public bool RightDown
 	{
 		get{
 			if(Input.GetKeyDown(KeyCode.RightArrow))
 				return true;
-			if(_rightDown)
+			if(rightDown)
 			{
-				_rightDown = false;
+				rightDown = false;
 				return true;
 			}
 			else
@@ -38,18 +64,18 @@ public class InputManager : MonoBehaviour {
 				return false;
 			}
 		}
-		set{_rightDown = value;}
+		set{rightDown = value;}
 	}
 
-	bool _downDown;
-	public bool downDown
+	bool downDown;
+	public bool DownDown
 	{
 		get{
 			if(Input.GetKeyDown(KeyCode.DownArrow))
 				return true;
-			if(_downDown)
+			if(downDown)
 			{
-				_downDown = false;
+				downDown = false;
 				return true;
 			}
 			else
@@ -57,18 +83,18 @@ public class InputManager : MonoBehaviour {
 				return false;
 			}
 		}
-		set{_downDown = value;}
+		set{downDown = value;}
 	}
 
-	bool _upDown;
-	public bool upDown
+	bool upDown;
+	public bool UpDown
 	{
 		get{
 			if(Input.GetKeyDown(KeyCode.UpArrow))
 				return true;
-			if(_upDown)
+			if(upDown)
 			{
-				_upDown = false;
+				upDown = false;
 				return true;
 			}
 			else
@@ -76,18 +102,18 @@ public class InputManager : MonoBehaviour {
 				return false;
 			}
 		}
-		set{_upDown = value;}
+		set{upDown = value;}
 	}
 
-	bool _ADown;
+	bool aDown;
 	public bool Adown
 	{
 		get{
 			if(Input.GetKeyDown(KeyCode.X))
 				return true;
-			if(_ADown)
+			if(aDown)
 			{
-				_ADown = false;
+				aDown = false;
 				return true;
 			}
 			else
@@ -95,18 +121,18 @@ public class InputManager : MonoBehaviour {
 				return false;
 			}
 		}
-		set{_ADown = value;}
+		set{aDown = value;}
 	}
 
-	bool _BDown;
+	bool bDown;
 	public bool Bdown
 	{
 		get{
 			if(Input.GetKeyDown(KeyCode.C))
 				return true;
-			if(_BDown)
+			if(bDown)
 			{
-				_BDown = false;
+				bDown = false;
 				return true;
 			}
 			else
@@ -114,18 +140,18 @@ public class InputManager : MonoBehaviour {
 				return false;
 			}
 		}
-		set{_BDown = value;}
+		set{bDown = value;}
 	}
 
-	bool _XDown;
+	bool xDown;
 	public bool Xdown
 	{
 		get{
 			if(Input.GetKeyDown(KeyCode.V))
 				return true;
-			if(_XDown)
+			if(xDown)
 			{
-				_XDown = false;
+				xDown = false;
 				return true;
 			}
 			else
@@ -133,7 +159,7 @@ public class InputManager : MonoBehaviour {
 				return false;
 			}
 		}
-		set{_XDown = value;}
+		set{xDown = value;}
 	}
 
 	public IEnumerator Wait(float duration)
@@ -143,4 +169,67 @@ public class InputManager : MonoBehaviour {
 		print(Time.time);
 	}
 
+	void Start()
+	{
+		PlayerIntents = new Dictionary<NetworkPlayer, sPlayerIntents>();
+		myNetworkView = this.gameObject.GetComponent<NetworkView>();
+	}
+
+	void OnPlayerConnected(NetworkPlayer p)
+	{
+		PlayerIntents.Add (p, new sPlayerIntents ());
+		myNetworkView.RPC ("NewPlayerConnected", RPCMode.OthersBuffered, p);
+	}
+
+	[RPC]
+	void NewPlayerConnected(NetworkPlayer p)
+	{
+		PlayerIntents.Add (p, new sPlayerIntents ());
+	}
+
+	//Il faut penser a faire l'update en fonction de l'exemple de la derniere fois
+	void Update()
+	{
+		if(Network.isClient)
+		{
+			if(downDown)
+				myNetworkView.RPC("wantDownDown", RPCMode.Server, Network.player, false);
+			if(upDown)
+				myNetworkView.RPC("wantUpDown", RPCMode.Server, Network.player, false);
+			if(leftDown)
+				myNetworkView.RPC("wantLeftDown", RPCMode.Server, Network.player, false);
+			if(rightDown)
+				myNetworkView.RPC("wantRightDown", RPCMode.Server, Network.player, false);
+			if(aDown)
+				myNetworkView.RPC("wantADown", RPCMode.Server, Network.player, false);
+			if(bDown)
+				myNetworkView.RPC("wantBDown", RPCMode.Server, Network.player, false);
+		}
+
+	}
+
+	void FixedUpdate()
+	{
+		//Se servir de cette méthode pour les mouvements et autres inputs
+	}
+
+	[RPC]
+	void PlayerWantToMoveUp(NetworkPlayer p, bool b)
+	{
+		PlayerIntents [p].wantUpDown = b;
+		if (Network.isServer)
+		{
+			myNetworkView.RPC("wantUpDown", RPCMode.Others, p, b);
+		}
+	}
+	
+	[RPC]
+	void PlayerWantToMoveDown(NetworkPlayer p, bool b)
+	{
+		PlayerIntents[p].wantDownDown = b;
+		if (Network.isServer)
+		{
+			myNetworkView.RPC("PlayerWantToMoveDown", RPCMode.Others, p, b);
+		}
+	}
 }

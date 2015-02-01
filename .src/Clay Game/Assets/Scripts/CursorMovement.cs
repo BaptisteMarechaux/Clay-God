@@ -3,6 +3,9 @@ using System.Collections;
 
 public class CursorMovement : MonoBehaviour {
 	[SerializeField]
+	private BattleMain battleMain;
+
+	[SerializeField]
 	private InputManager input;
 	//Prefabs for Range and Mvt Display
 	[SerializeField]
@@ -13,7 +16,7 @@ public class CursorMovement : MonoBehaviour {
 	private bool charSelected;
 	private bool hover;
 	private Transform selectedCharTransform;
-	private CharacterStats hoverCharacter;
+	private BattleUnit hoverCharacter;
 
 
 
@@ -26,40 +29,29 @@ public class CursorMovement : MonoBehaviour {
 	void Update () {
 		if(input.Adown)
 		{
-			if(charSelected)
-			{
-				selectedCharTransform.position = new Vector3(gameObject.transform.position.x, selectedCharTransform.position.y,gameObject.transform.position.z);
-				charSelected = false;
-			}
-
-			if(CharacterSelection() && !charSelected)
-			{
-				charSelected = true;
-			}
-
+			CharacterMove();
 		}
 
 		if(input.Bdown)
 		{
-			if(charSelected)
-				charSelected = false;
+			Canceling();
 		}
 
-		if(input.leftDown)
+		if(input.LeftDown)
 		{
 			gameObject.transform.Translate(Vector3.left);
 		}
 		
-		if(input.rightDown)
+		if(input.RightDown)
 		{
 			gameObject.transform.Translate(Vector3.right);
 		}
 		
-		if(input.downDown)
+		if(input.DownDown)
 		{
 			gameObject.transform.Translate(Vector3.back);
 		}
-		if(input.upDown)
+		if(input.UpDown)
 		{
 			gameObject.transform.Translate(Vector3.forward);
 		}
@@ -88,7 +80,7 @@ public class CursorMovement : MonoBehaviour {
 	{
 		if(col.tag == "Character")
 		{
-			hoverCharacter = col.GetComponent<CharacterStats>();
+			hoverCharacter = col.GetComponent<BattleUnit>();
 		}
 	}
 
@@ -108,12 +100,9 @@ public class CursorMovement : MonoBehaviour {
 		if(col.tag == "Character"){
 			if(!charSelected)
 			{
-				if(hoverCharacter.alreadySelected)
+				if(hoverCharacter.AlreadySelected)
 				{
-					for(int i=0;i<hoverCharacter.mvtRangeObjects.Count;i++)
-					{
-						hoverCharacter.mvtRangeObjects[i].SetActive(false);
-					}
+					hoverCharacter.HidePanels();
 				}
 				hover = false;
 			}
@@ -129,117 +118,49 @@ public class CursorMovement : MonoBehaviour {
 		GameObject tmpMvtClone;
 		if(hover)
 		{
-			if(hoverCharacter.alreadySelected)
+			if(hoverCharacter.AlreadySelected)
 			{
-				for(int i=0;i<hoverCharacter.mvtRangeObjects.Count;i++)
-				{
-					hoverCharacter.mvtRangeObjects[i].SetActive(true);
-				}
+				hoverCharacter.ShowPanels();
 			}
 			else
 			{
-				//Movement Display
-				for(int i=0;i<hoverCharacter.Movement+1;i++)
-				{
-					for(int j=-i-1;j<i;j++)
-					{
-						tmpMvtClone =(GameObject)Instantiate(mvtObj, new Vector3(i-hoverCharacter.Movement, 1, j+1), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-					
-				}
-				
-				for(int i=0;i<hoverCharacter.Movement;i++)
-				{
-					for(int j=-i-1;j<i;j++)
-					{
-						tmpMvtClone =(GameObject)Instantiate(mvtObj, new Vector3(hoverCharacter.Movement-i, 1, j+1), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-					
-				}
-
-
-				//Range Display
-				//Left
-				for(int i=0;i>=-hoverCharacter.Movement;i--)
-				{
-					for(int j=-hoverCharacter.Movement;j>-(hoverCharacter.Movement+hoverCharacter.Range);j--)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j-1-i), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-
-					for(int j=hoverCharacter.Movement;j<hoverCharacter.Movement+hoverCharacter.Range;j++)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j+1+i), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-				}
-				for(int i=1;i<hoverCharacter.Range+1;i++)
-				{
-					Debug.Log(hoverCharacter.Range-i);
-					for(int j=0;j<=hoverCharacter.Range-i;j++)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(-hoverCharacter.Movement-i, 1, -j), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-						Debug.Log(tmpMvtClone.transform.position);
-					}
-
-
-					for(int j=1;j<=hoverCharacter.Range-i;j++)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(-hoverCharacter.Movement-i, 1, j), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-				}
-				//Right
-				for(int i=1;i<=hoverCharacter.Movement;i++)
-				{
-					for(int j=-hoverCharacter.Movement;j>-(hoverCharacter.Movement+hoverCharacter.Range);j--)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j-1+i), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-					
-					for(int j=hoverCharacter.Movement;j<hoverCharacter.Movement+hoverCharacter.Range;j++)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j+1-i), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-				}
-				for(int i=1;i<hoverCharacter.Range+1;i++)
-				{
-					Debug.Log(hoverCharacter.Range-i);
-					for(int j=0;j<=hoverCharacter.Range-i;j++)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(hoverCharacter.Movement+i, 1, -j), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-						Debug.Log(tmpMvtClone.transform.position);
-					}
-					
-					
-					for(int j=1;j<=hoverCharacter.Range-i;j++)
-					{
-						tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(hoverCharacter.Movement+i, 1, j), Quaternion.identity);
-						tmpMvtClone.transform.parent = hoverCharacter.transform;
-						hoverCharacter.mvtRangeObjects.Add(tmpMvtClone);
-					}
-				}
-
-				hoverCharacter.alreadySelected = true;
+				hoverCharacter.CreateRangePanels(rangeObj);
+				hoverCharacter.CreateMovementPanels(mvtObj);
 			}
 
 		}
 	}
 
+	void CharacterMove()
+	{
+		if(charSelected)
+			{
+				selectedCharTransform.position = new Vector3(gameObject.transform.position.x, selectedCharTransform.position.y,gameObject.transform.position.z);
+				charSelected = false;
+			}
+
+			if(CharacterSelection() && !charSelected)
+			{
+				charSelected = true;
+			}
+	}
+	
+	void Canceling()
+	{
+		if(battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+		{
+			if(charSelected)
+				charSelected = false;
+		}
+
+		if(battleMain.battleState == BattleMain.Battlestate.selectingCharAction)
+		{
+			battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
+		}
+
+		if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
+		{
+			battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
+		}
+	}
 }

@@ -3,9 +3,13 @@ using System.Collections;
 
 public class BattleMain : MonoBehaviour {
 	public enum Battlestate{
+		selectingCharacter,
+		selectingCharAction,
+		selectingAtkTarget,
+		enemyTurn
+	};
 
-
-	}
+	public Battlestate battleState;
 
 	[SerializeField]
 	GameObject mobileButtons;
