@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BattleUnderGod : MonoBehaviour {
+public class BattleSideKick : BattleEntity {
 
 	// Use this for initialization
 	void Start () {

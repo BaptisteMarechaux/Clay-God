@@ -6,14 +6,27 @@ public class BattleUnit : BattleEntity {
 	/// Classe décrivant une unité, ses statistiques et certaines de ses actions
 	[SerializeField]
 	private int power; //Puissance de l'unité
+	public int Power{
+		get{return power;}
+	}
 	[SerializeField]
 	private int resist; //Résistance de l'unité
 	[SerializeField]
 	private int movement;
+	public int Movement{
+		get{return movement;}
+	}
+
 	[SerializeField]
 	private int range;
+	public int Range{
+		get{return range;}
+	}
+
+	[HideInInspector]
 	public bool panelsCreated;
 	private bool moving;
+
 	private bool alreadySelected;
 	public bool AlreadySelected{
 		get{return alreadySelected;}
@@ -21,16 +34,15 @@ public class BattleUnit : BattleEntity {
 	}
 
 	private List<GameObject> mvtPanels = new List<GameObject>();
-	private List<GameObject> rangePanels = new List<GameObject>();
-	public int Movement{
-		get{return movement;}
-	}
-	public int Range{
-		get{return range;}
-	}
 	public List<GameObject> MvtPanels{
 		get{return mvtPanels;}
 	}
+
+	private List<GameObject> rangePanels = new List<GameObject>();
+	public List<GameObject> RangePanels{
+		get{ return rangePanels;}
+	}
+	
 	// Use this for initialization
 	public override void Start () {
 		base.Start();
@@ -68,6 +80,7 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone =(GameObject)Instantiate(mvtObj, new Vector3(i-Movement, 1, j+1), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(i-Movement, - 1, j+1);
 				mvtPanels.Add(tmpMvtClone);
 			}
 			
@@ -79,6 +92,7 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone =(GameObject)Instantiate(mvtObj, new Vector3(Movement-i, 1, j+1), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(Movement-i, - 1, j+1);
 				mvtPanels.Add(tmpMvtClone);
 			}
 			
@@ -97,6 +111,7 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j-1-i), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(i, - 1, j-1-i);
 				rangePanels.Add(tmpMvtClone);
 			}
 			
@@ -104,6 +119,7 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j+1+i), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(i, - 1, j+1+i);
 				rangePanels.Add(tmpMvtClone);
 			}
 		}
@@ -114,15 +130,16 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(-Movement-i, 1, -j), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(-Movement-i, - 1, -j);
 				rangePanels.Add(tmpMvtClone);
-				Debug.Log(tmpMvtClone.transform.position);
 			}
 			
 			
 			for(int j=1;j<=Range-i;j++)
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(-Movement-i, 1, j), Quaternion.identity);
-				tmpMvtClone.transform.parent =transform;
+				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(-Movement-i,- 1, j);
 				rangePanels.Add(tmpMvtClone);
 			}
 		}
@@ -133,6 +150,7 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j-1+i), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(i,- 1, j-1+i);
 				rangePanels.Add(tmpMvtClone);
 			}
 			
@@ -140,18 +158,18 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(i, 1, j+1-i), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(i,- 1, j+1-i);
 				rangePanels.Add(tmpMvtClone);
 			}
 		}
 		for(int i=1;i<Range+1;i++)
 		{
-			Debug.Log(Range-i);
 			for(int j=0;j<=Range-i;j++)
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(Movement+i, 1, -j), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(Movement+i, - 1, -j);
 				rangePanels.Add(tmpMvtClone);
-				Debug.Log(tmpMvtClone.transform.position);
 			}
 			
 			
@@ -159,6 +177,7 @@ public class BattleUnit : BattleEntity {
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(Movement+i, 1, j), Quaternion.identity);
 				tmpMvtClone.transform.parent = transform;
+				tmpMvtClone.transform.localPosition = new Vector3(Movement+i, - 1, j);
 				rangePanels.Add(tmpMvtClone);
 			}
 		}

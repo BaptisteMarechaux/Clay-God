@@ -3,6 +3,8 @@ using System.Collections;
 
 public class BattleMain : MonoBehaviour {
 	public enum Battlestate{
+		waiting,
+		hoverCharacter,
 		selectingCharacter,
 		selectingCharAction,
 		selectingAtkTarget,
@@ -19,10 +21,12 @@ public class BattleMain : MonoBehaviour {
 			mobileButtons.SetActive(true);
 		else
 			mobileButtons.SetActive(false);
+
+		battleState = BattleMain.Battlestate.waiting;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		Debug.Log(battleState);
 	}
 }

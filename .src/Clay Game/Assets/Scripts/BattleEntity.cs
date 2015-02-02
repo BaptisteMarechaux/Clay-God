@@ -2,11 +2,18 @@
 using System.Collections;
 
 public abstract class BattleEntity : MonoBehaviour {
+	[SerializeField]
 	protected int hp;
 	[SerializeField]
 	protected int hpMax;
 	[SerializeField]
-	protected int nickname;
+	protected string nickname;
+
+	[SerializeField]
+	protected bool isEnemy;
+	public bool IsEnemy{
+		get{return isEnemy;}
+	}
 
 	public virtual void Start()
 	{

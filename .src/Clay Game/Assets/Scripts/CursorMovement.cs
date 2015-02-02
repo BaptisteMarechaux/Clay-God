@@ -4,7 +4,6 @@ using System.Collections;
 public class CursorMovement : MonoBehaviour {
 	[SerializeField]
 	private BattleMain battleMain;
-
 	[SerializeField]
 	private InputManager input;
 	//Prefabs for Range and Mvt Display
@@ -12,11 +11,12 @@ public class CursorMovement : MonoBehaviour {
 	private GameObject mvtObj;
 	[SerializeField]
 	private GameObject rangeObj;
-	private bool canSelect;
-	private bool charSelected;
-	private bool hover;
-	private Transform selectedCharTransform;
-	private BattleUnit hoverCharacter;
+	private bool canSelect; // On peut sélectionner une entité
+	private bool charSelected; //On a déja sélectionné une entité
+	private bool hover; //On survole une entité
+	private Transform selectedCharTransform; //Transform de l'entité selectionnée
+	private BattleUnit hoverCharacter; //Entité qui est survolée par le curseur
+	private BattleEntity selectedTarget;
 
 
 
@@ -29,6 +29,10 @@ public class CursorMovement : MonoBehaviour {
 	void Update () {
 		if(input.Adown)
 		{
+			if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
+			{
+				selectedTarget.ChangeHP(-hoverCharacter.Power);
+			}
 			CharacterMove();
 		}
 
@@ -80,7 +84,14 @@ public class CursorMovement : MonoBehaviour {
 	{
 		if(col.tag == "Character")
 		{
+			if(battleMain.battleState == BattleMain.Battlestate.waiting)
+				battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
 			hoverCharacter = col.GetComponent<BattleUnit>();
+
+			if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
+			{
+				selectedTarget = col.GetComponent<BattleEntity>();
+			}
 		}
 	}
 
@@ -105,11 +116,13 @@ public class CursorMovement : MonoBehaviour {
 					hoverCharacter.HidePanels();
 				}
 				hover = false;
+				battleMain.battleState = BattleMain.Battlestate.waiting;
 			}
 			else
 			{
 				canSelect = false;
 			}
+
 		}
 	}
 
@@ -142,6 +155,7 @@ public class CursorMovement : MonoBehaviour {
 			if(CharacterSelection() && !charSelected)
 			{
 				charSelected = true;
+				battleMain.battleState =  BattleMain.Battlestate.selectingAtkTarget;
 			}
 	}
 	
