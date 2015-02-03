@@ -18,9 +18,8 @@ public class CursorMovement : MonoBehaviour {
 	private BattleUnit hoverCharacter; //Entité qui est survolée par le curseur
 	private BattleEntity selectedTarget;
 
-	private Vector2 moveCount=new Vector2(0,0);
-
-
+	private Vector2 moveCount=new Vector2(0,0);//Verifie combien de mouvements sont effectués
+	private Vector2 adVal = new Vector2(0,0);//Check is movement is still possible
 	// Use this for initialization
 	void Start () {
 	
@@ -44,7 +43,8 @@ public class CursorMovement : MonoBehaviour {
 
 		if(input.LeftDown)
 		{
-			if(isMovable(moveCount, -1))
+			adVal.x = -1; adVal.y=0;
+			if(isMovable())
 			{
 				if(charSelected)
 					moveCount.x--;
@@ -55,7 +55,8 @@ public class CursorMovement : MonoBehaviour {
 		
 		if(input.RightDown)
 		{
-			if(isMovable(moveCount, 1))
+			adVal.x = 1; adVal.y=0;
+			if(isMovable())
 			{
 				if(charSelected)
 					moveCount.x++;
@@ -67,7 +68,8 @@ public class CursorMovement : MonoBehaviour {
 		
 		if(input.DownDown)
 		{
-			if(isMovable(moveCount, -1))
+			adVal.x = 0; adVal.y=-1;
+			if(isMovable())
 			{
 				if(charSelected)
 					moveCount.y--;
@@ -78,7 +80,8 @@ public class CursorMovement : MonoBehaviour {
 		}
 		if(input.UpDown)
 		{
-			if(isMovable(moveCount, 1))
+			adVal.x = 0; adVal.y=1;
+			if(isMovable())
 			{
 				if(charSelected)
 					moveCount.y++;
@@ -97,7 +100,7 @@ public class CursorMovement : MonoBehaviour {
 		RangeDisplay();
 	}
 
-	bool isMovable(Vector2 m,Vector2 addedValue) //Vérifie si on peut encore faire avancer le curseur
+	bool isMovable() //Vérifie si on peut encore faire avancer le curseur
 	{
 		if(moveCount.x < -hoverCharacter.Movement)
 			moveCount.x = -hoverCharacter.Movement;
@@ -108,7 +111,7 @@ public class CursorMovement : MonoBehaviour {
 		if(moveCount.y > hoverCharacter.Movement)
 			moveCount.y = hoverCharacter.Movement;
 
-		if((Mathf.Abs(m.x) + Mathf.Abs(m.y)) + addedValue > hoverCharacter.Movement)
+		if((Mathf.Abs(moveCount.x) + Mathf.Abs(moveCount.y)) > hoverCharacter.Movement)
 			return false;
 		return true;
 	}
