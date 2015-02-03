@@ -18,6 +18,7 @@ public class CursorMovement : MonoBehaviour {
 	private BattleUnit hoverCharacter; //Entité qui est survolée par le curseur
 	private BattleEntity selectedTarget;
 
+	private Vector2 moveCount=new Vector2(0,0);
 
 
 	// Use this for initialization
@@ -43,30 +44,81 @@ public class CursorMovement : MonoBehaviour {
 
 		if(input.LeftDown)
 		{
-			gameObject.transform.Translate(Vector3.left);
+			if(isMovable(moveCount, -1))
+			{
+				if(charSelected)
+					moveCount.x--;
+				gameObject.transform.Translate(Vector3.left);
+			}
+
 		}
 		
 		if(input.RightDown)
 		{
-			gameObject.transform.Translate(Vector3.right);
+			if(isMovable(moveCount, 1))
+			{
+				if(charSelected)
+					moveCount.x++;
+				
+				gameObject.transform.Translate(Vector3.right);
+			}
+
 		}
 		
 		if(input.DownDown)
 		{
-			gameObject.transform.Translate(Vector3.back);
+			if(isMovable(moveCount, -1))
+			{
+				if(charSelected)
+					moveCount.y--;
+				
+				gameObject.transform.Translate(Vector3.back);
+			}
+
 		}
 		if(input.UpDown)
 		{
-			gameObject.transform.Translate(Vector3.forward);
-		}
+			if(isMovable(moveCount, 1))
+			{
+				if(charSelected)
+					moveCount.y++;
+				
+				gameObject.transform.Translate(Vector3.forward);
+			}
 
+		}
 
 
 	}
 
 	void FixedUpdate()
 	{
+		Debug.Log (moveCount);
 		RangeDisplay();
+	}
+
+	bool isMovable(Vector2 m,Vector2 addedValue) //Vérifie si on peut encore faire avancer le curseur
+	{
+		if(moveCount.x < -hoverCharacter.Movement)
+			moveCount.x = -hoverCharacter.Movement;
+		if(moveCount.y < -hoverCharacter.Movement)
+			moveCount.y = -hoverCharacter.Movement;
+		if(moveCount.x > hoverCharacter.Movement)
+			moveCount.x = hoverCharacter.Movement;
+		if(moveCount.y > hoverCharacter.Movement)
+			moveCount.y = hoverCharacter.Movement;
+
+		if((Mathf.Abs(m.x) + Mathf.Abs(m.y)) + addedValue > hoverCharacter.Movement)
+			return false;
+		return true;
+	}
+
+	void MoveCountChange()
+	{
+		if((Mathf.Abs(moveCount.x) + Mathf.Abs(moveCount.y)) >= hoverCharacter.Movement)
+		{
+
+		}
 	}
 
 	bool CharacterSelection()
@@ -75,8 +127,6 @@ public class CursorMovement : MonoBehaviour {
 		{
 			return true;
 		}
-			
-
 		return false;
 	}
 
@@ -85,13 +135,22 @@ public class CursorMovement : MonoBehaviour {
 		if(col.tag == "Character")
 		{
 			if(battleMain.battleState == BattleMain.Battlestate.waiting)
+			{
 				battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
-			hoverCharacter = col.GetComponent<BattleUnit>();
+				hoverCharacter = col.GetComponent<BattleUnit>();
+				hover = true;
+				RangeDisplay();
+				selectedCharTransform = col.transform;
+
+			}
+				
+
 
 			if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
 			{
 				selectedTarget = col.GetComponent<BattleEntity>();
 			}
+
 		}
 	}
 
@@ -99,9 +158,7 @@ public class CursorMovement : MonoBehaviour {
 	{
 		if(col.tag == "Character")
 		{
-			hover = true;
-			RangeDisplay();
-			selectedCharTransform = col.transform;
+
 			if(!charSelected)
 				canSelect = true;
 		}
@@ -152,10 +209,10 @@ public class CursorMovement : MonoBehaviour {
 				charSelected = false;
 			}
 
-			if(CharacterSelection() && !charSelected)
+			if(CharacterSelection() && !charSelected) // Verifie si on peut sélectionner l'entité et qu'on en a pas deja sélectionné
 			{
 				charSelected = true;
-				battleMain.battleState =  BattleMain.Battlestate.selectingAtkTarget;
+				//battleMain.battleState =  BattleMain.Battlestate.selectingAtkTarget;
 			}
 	}
 	
