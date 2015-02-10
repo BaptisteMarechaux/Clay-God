@@ -17,11 +17,12 @@ public class BattleMain : MonoBehaviour {
 	GameObject mobileButtons;
 	// Use this for initialization
 	void Start () {
+        /*
 		if (Application.platform == RuntimePlatform.Android)
 			mobileButtons.SetActive(true);
 		else
 			mobileButtons.SetActive(false);
-
+        */
 		battleState = BattleMain.Battlestate.waiting;
 	}
 	

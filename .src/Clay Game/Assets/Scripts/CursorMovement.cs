@@ -15,92 +15,120 @@ public class CursorMovement : MonoBehaviour {
 	private bool charSelected; //On a déja sélectionné une entité
 	private bool hover; //On survole une entité
 	private Transform selectedCharTransform; //Transform de l'entité selectionnée
-	private BattleUnit hoverCharacter; //Entité qui est survolée par le curseur
-	private BattleEntity selectedTarget;
+	private BattleUnit hoverCharacter; //Entité qui est survolée par le curseur et enventuellement, celle qui est sélectionnée
+	private BattleEntity selectedTarget; //Quand on choisit une cible, c'est la cible en cours quand on a pas encore choisi
 
 	private Vector2 moveCount=new Vector2(0,0);//Verifie combien de mouvements sont effectués
 	private Vector2 adVal = new Vector2(0,0);//Check is movement is still possible
+
+    bool hurting;
+    Color c;
+    int ci = 0;
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(input.Adown)
-		{
-			if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
-			{
-				selectedTarget.ChangeHP(-hoverCharacter.Power);
-			}
-			CharacterMove();
-		}
+        InputManagment();
 
-		if(input.Bdown)
-		{
-			Canceling();
-		}
+        if (hurting)
+        {
+            selectedTarget.gameObject.renderer.material.color = Color.Lerp(selectedTarget.gameObject.renderer.material.color, new Color(1, 0, 0), 10*Time.deltaTime);
+            if (ci >= 120)
+            {
+                selectedTarget.gameObject.renderer.material.color = Color.Lerp(selectedTarget.gameObject.renderer.material.color, c, 10 * Time.deltaTime);
+                hurting = false;
+                ci = 0;
+            }
 
-		if(input.LeftDown)
-		{
-			adVal.x = -1; adVal.y=0;
-			if(isMovable())
-			{
-				if(charSelected)
-					moveCount.x--;
-				gameObject.transform.Translate(Vector3.left);
-			}
-
-		}
-		
-		if(input.RightDown)
-		{
-			adVal.x = 1; adVal.y=0;
-			if(isMovable())
-			{
-				if(charSelected)
-					moveCount.x++;
-				
-				gameObject.transform.Translate(Vector3.right);
-			}
-
-		}
-		
-		if(input.DownDown)
-		{
-			adVal.x = 0; adVal.y=-1;
-			if(isMovable())
-			{
-				if(charSelected)
-					moveCount.y--;
-				
-				gameObject.transform.Translate(Vector3.back);
-			}
-
-		}
-		if(input.UpDown)
-		{
-			adVal.x = 0; adVal.y=1;
-			if(isMovable())
-			{
-				if(charSelected)
-					moveCount.y++;
-				
-				gameObject.transform.Translate(Vector3.forward);
-			}
-
-		}
-
+        }
 
 	}
+
+    void InputManagment()
+    {
+        if (input.Adown)
+        {
+            if (battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
+            {
+                selectedTarget.ChangeHP(-hoverCharacter.Power);
+                c = selectedTarget.gameObject.renderer.material.color;
+                
+            }
+            if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
+                CharacterMove();
+
+            if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
+        }
+
+        if (input.Bdown)
+        {
+            Canceling();
+        }
+
+        if (input.LeftDown)
+        {
+            adVal.x = -1; adVal.y = 0;
+            if (isMovable())
+            {
+                if (charSelected)
+                {
+                    moveCount.x--;
+                }
+
+                gameObject.transform.Translate(Vector3.left);
+            }
+
+        }
+
+        if (input.RightDown)
+        {
+            adVal.x = 1; adVal.y = 0;
+            if (isMovable())
+            {
+                if (charSelected)
+                    moveCount.x++;
+
+                gameObject.transform.Translate(Vector3.right);
+            }
+
+        }
+
+        if (input.DownDown)
+        {
+            adVal.x = 0; adVal.y = -1;
+            if (isMovable())
+            {
+                if (charSelected)
+                    moveCount.y--;
+
+                gameObject.transform.Translate(Vector3.back);
+            }
+
+        }
+        if (input.UpDown)
+        {
+            adVal.x = 0; adVal.y = 1;
+            if (isMovable())
+            {
+                if (charSelected)
+                    moveCount.y++;
+
+                gameObject.transform.Translate(Vector3.forward);
+            }
+
+        }
+    }
 
 	void FixedUpdate()
 	{
-		Debug.Log (moveCount);
 		RangeDisplay();
 	}
-
-	bool isMovable() //Vérifie si on peut encore faire avancer le curseur
+	
+	void moveCountClamp()
 	{
 		if(moveCount.x < -hoverCharacter.Movement)
 			moveCount.x = -hoverCharacter.Movement;
@@ -110,18 +138,13 @@ public class CursorMovement : MonoBehaviour {
 			moveCount.x = hoverCharacter.Movement;
 		if(moveCount.y > hoverCharacter.Movement)
 			moveCount.y = hoverCharacter.Movement;
-
-		if((Mathf.Abs(moveCount.x) + Mathf.Abs(moveCount.y)) > hoverCharacter.Movement)
-			return false;
-		return true;
 	}
 
-	void MoveCountChange()
+	bool isMovable() //Vérifie si on peut encore faire avancer le curseur
 	{
-		if((Mathf.Abs(moveCount.x) + Mathf.Abs(moveCount.y)) >= hoverCharacter.Movement)
-		{
-
-		}
+		if((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Movement)
+			return false;
+		return true;
 	}
 
 	bool CharacterSelection()
@@ -139,6 +162,7 @@ public class CursorMovement : MonoBehaviour {
 		{
 			if(battleMain.battleState == BattleMain.Battlestate.waiting)
 			{
+
 				battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
 				hoverCharacter = col.GetComponent<BattleUnit>();
 				hover = true;
@@ -146,8 +170,8 @@ public class CursorMovement : MonoBehaviour {
 				selectedCharTransform = col.transform;
 
 			}
-				
 
+           // if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
 
 			if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
 			{
@@ -184,6 +208,11 @@ public class CursorMovement : MonoBehaviour {
 			}
 
 		}
+
+        if (col.tag == "Character")
+        {
+           
+        }
 	}
 
 	void RangeDisplay()
@@ -210,11 +239,14 @@ public class CursorMovement : MonoBehaviour {
 			{
 				selectedCharTransform.position = new Vector3(gameObject.transform.position.x, selectedCharTransform.position.y,gameObject.transform.position.z);
 				charSelected = false;
+				adVal.x =0; adVal.y=0;
+				moveCount.x = 0; moveCount.y=0;
 			}
 
 			if(CharacterSelection() && !charSelected) // Verifie si on peut sélectionner l'entité et qu'on en a pas deja sélectionné
 			{
 				charSelected = true;
+                battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
 				//battleMain.battleState =  BattleMain.Battlestate.selectingAtkTarget;
 			}
 	}

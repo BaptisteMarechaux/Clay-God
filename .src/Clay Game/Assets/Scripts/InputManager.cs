@@ -33,7 +33,7 @@ public class InputManager : MonoBehaviour {
 	public bool LeftDown
 	{
 		get{
-			if(Input.GetKeyDown(KeyCode.LeftArrow))
+			if(Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Q))
 				return true;
 			if(leftDown)
 			{
@@ -52,7 +52,7 @@ public class InputManager : MonoBehaviour {
 	public bool RightDown
 	{
 		get{
-			if(Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
 				return true;
 			if(rightDown)
 			{
@@ -71,7 +71,7 @@ public class InputManager : MonoBehaviour {
 	public bool DownDown
 	{
 		get{
-			if(Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
 				return true;
 			if(downDown)
 			{
@@ -90,7 +90,7 @@ public class InputManager : MonoBehaviour {
 	public bool UpDown
 	{
 		get{
-			if(Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z))
 				return true;
 			if(upDown)
 			{
@@ -109,7 +109,7 @@ public class InputManager : MonoBehaviour {
 	public bool Adown
 	{
 		get{
-			if(Input.GetKeyDown(KeyCode.X))
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
 				return true;
 			if(aDown)
 			{
@@ -128,7 +128,7 @@ public class InputManager : MonoBehaviour {
 	public bool Bdown
 	{
 		get{
-			if(Input.GetKeyDown(KeyCode.C))
+            if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.Backspace))
 				return true;
 			if(bDown)
 			{
