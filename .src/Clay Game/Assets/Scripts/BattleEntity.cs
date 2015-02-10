@@ -15,6 +15,13 @@ public abstract class BattleEntity : MonoBehaviour {
 		get{return isEnemy;}
 	}
 
+    protected bool turnEnded;
+    public bool TurnEnded
+    {
+        get { return turnEnded; }
+        set { turnEnded = value; }
+    }
+
 	public virtual void Start()
 	{
 		hp = hpMax;

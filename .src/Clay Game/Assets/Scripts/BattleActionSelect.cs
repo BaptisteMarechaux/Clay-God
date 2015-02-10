@@ -14,16 +14,19 @@ public class BattleActionSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    
+	    if(battleMain.battleState == BattleMain.Battlestate.selectingCharAction)
+        {
+            ActionButtonsGroup.gameObject.SetActive(true);
+        }
 	}
 
-    void SelectAttack()
+    public void SelectAttack()
     {
         battleMain.battleState = BattleMain.Battlestate.selectingAtkTarget;
         ActionButtonsGroup.gameObject.SetActive(false);
 
     }
-    void SelectWait()
+    public void SelectWait()
     {
         battleMain.battleState = BattleMain.Battlestate.waiting;
         ActionButtonsGroup.gameObject.SetActive(false);

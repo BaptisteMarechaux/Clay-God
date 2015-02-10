@@ -43,12 +43,7 @@ public class BattleUnit : BattleEntity {
 		get{ return rangePanels;}
 	}
 
-    private bool turnEnded;
-    public bool TurnEnded
-    {
-        get{return turnEnded;}
-        set{turnEnded = value;}
-    }
+   
 	
 	// Use this for initialization
 	public override void Start () {

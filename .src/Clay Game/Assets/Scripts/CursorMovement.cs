@@ -17,9 +17,9 @@ public class CursorMovement : MonoBehaviour {
 	private Transform selectedCharTransform; //Transform de l'entité selectionnée
 	private BattleUnit hoverCharacter; //Entité qui est survolée par le curseur et enventuellement, celle qui est sélectionnée
 	private BattleEntity selectedTarget; //Quand on choisit une cible, c'est la cible en cours quand on a pas encore choisi
-
 	private Vector2 moveCount=new Vector2(0,0);//Verifie combien de mouvements sont effectués
 	private Vector2 adVal = new Vector2(0,0);//Check is movement is still possible
+    private Vector3 originalPos; //Position d'origine que l'on va garder au cas ou le joueur invalide un déplacement
 
     bool hurting;
     Color c;
@@ -57,11 +57,23 @@ public class CursorMovement : MonoBehaviour {
                 c = selectedTarget.gameObject.renderer.material.color;
                 
             }
-            if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
-                CharacterMove();
+
+            if (battleMain.battleState == BattleMain.Battlestate.selectingCharAction)
+            {
+
+            }
 
             if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+            {
+                CharacterMoveValidation();
                 battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
+            }
+
+            if (battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
+            {
+                battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
+            }
+                
         }
 
         if (input.Bdown)
@@ -147,6 +159,14 @@ public class CursorMovement : MonoBehaviour {
 		return true;
 	}
 
+    bool isMovableForSelectAttack()
+    {
+        //Fonction qui va servir a vérifier si on peut déplacer le curseur quand on séléctionne une cible
+        if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Range)
+            return false;
+        return true;
+    }
+
 	bool CharacterSelection()
 	{
 		if(canSelect)
@@ -163,11 +183,16 @@ public class CursorMovement : MonoBehaviour {
 			if(battleMain.battleState == BattleMain.Battlestate.waiting)
 			{
 
-				battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
+				
 				hoverCharacter = col.GetComponent<BattleUnit>();
-				hover = true;
-				RangeDisplay();
-				selectedCharTransform = col.transform;
+                selectedCharTransform = col.transform;
+                if(!hoverCharacter.TurnEnded)
+                {
+                    RangeDisplay();
+                    battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
+                }
+				   
+				
 
 			}
 
@@ -193,7 +218,7 @@ public class CursorMovement : MonoBehaviour {
 	void OnTriggerExit(Collider col)
 	{
 		if(col.tag == "Character"){
-			if(!charSelected)
+			if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
 			{
 				if(hoverCharacter.AlreadySelected)
 				{
@@ -202,23 +227,14 @@ public class CursorMovement : MonoBehaviour {
 				hover = false;
 				battleMain.battleState = BattleMain.Battlestate.waiting;
 			}
-			else
-			{
-				canSelect = false;
-			}
 
 		}
 
-        if (col.tag == "Character")
-        {
-           
-        }
 	}
 
 	void RangeDisplay()
 	{
-		GameObject tmpMvtClone;
-		if(hover)
+		if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
 		{
 			if(hoverCharacter.AlreadySelected)
 			{
@@ -233,34 +249,25 @@ public class CursorMovement : MonoBehaviour {
 		}
 	}
 
-	void CharacterMove()
-	{
-		if(charSelected)
-			{
-				selectedCharTransform.position = new Vector3(gameObject.transform.position.x, selectedCharTransform.position.y,gameObject.transform.position.z);
-				charSelected = false;
-				adVal.x =0; adVal.y=0;
-				moveCount.x = 0; moveCount.y=0;
-			}
-
-			if(CharacterSelection() && !charSelected) // Verifie si on peut sélectionner l'entité et qu'on en a pas deja sélectionné
-			{
-				charSelected = true;
-                battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
-				//battleMain.battleState =  BattleMain.Battlestate.selectingAtkTarget;
-			}
-	}
+    void CharacterMoveValidation()
+    {
+        originalPos = selectedCharTransform.position;
+        selectedCharTransform.position = new Vector3(gameObject.transform.position.x, selectedCharTransform.position.y, gameObject.transform.position.z);
+        adVal.x = 0; adVal.y = 0;
+        moveCount.x = 0; moveCount.y = 0;
+    }
 	
 	void Canceling()
 	{
 		if(battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
 		{
-			if(charSelected)
-				charSelected = false;
+            gameObject.transform.position= new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
+            battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
 		}
 
 		if(battleMain.battleState == BattleMain.Battlestate.selectingCharAction)
 		{
+            selectedCharTransform.position = originalPos;
 			battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
 		}
 
