@@ -43,7 +43,7 @@ public class BattleUnit : BattleEntity {
 		get{ return rangePanels;}
 	}
 
-   
+    private List<GameObject> tempRangePanels;
 	
 	// Use this for initialization
 	public override void Start () {
@@ -219,4 +219,63 @@ public class BattleUnit : BattleEntity {
 			gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, destination, Time.deltaTime);
 		}
 	}
+
+    public void ShowRangeForAttacking()
+    {
+        int a = 0;
+            tempRangePanels = rangePanels;
+            for (int i = 0; i < Range;i++)
+            {
+                for(int j = range;j > 0;j--)
+                {
+                    rangePanels[a].transform.localPosition = new Vector3(i+1, -0.49f, j-1);
+                    a++;
+                }
+                for(int j = 1;j <range-1;j++)
+                {
+                    rangePanels[a].transform.localPosition = new Vector3(i+1, -0.49f, -j);
+                    a++;
+                }
+                
+            }
+       
+            for (int i = 0; i > -Range;i--)
+            {
+                for(int j = range;j > 0;j--)
+                {
+                    rangePanels[a].transform.localPosition = new Vector3(i-1, -0.49f, j-1);
+                    a++;
+                }
+                for(int j = 1;j <range-1;j++)
+                {
+                    rangePanels[a].transform.localPosition = new Vector3(i-1, -0.49f, -j);
+                    a++;
+                }
+                
+            }
+
+            for(int i=0;i<range;i++)
+            {
+                rangePanels[a].transform.localPosition = new Vector3(0, -0.49f, i+1);
+                a++;
+                rangePanels[a].transform.localPosition = new Vector3(0, -0.49f, -i-1);
+                a++;
+            }
+
+            for (int i = 0; i < a; i++)
+            {
+                rangePanels[i].gameObject.SetActive(true);
+            }
+        }
+    public void HideRangeForAttacking()
+    {
+        if(alreadySelected)
+        {
+            for(int i=0;i<rangePanels.Count;i++)
+            {
+                rangePanels[i].transform.position = tempRangePanels[i].transform.position;
+                rangePanels[i].gameObject.SetActive(false);
+            }
+        }
+    }
 }

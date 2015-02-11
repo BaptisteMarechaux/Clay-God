@@ -4,10 +4,22 @@ using System.Collections;
 public abstract class BattleEntity : MonoBehaviour {
 	[SerializeField]
 	protected int hp;
+    public int HP
+    {
+        get { return hp; }
+    }
 	[SerializeField]
 	protected int hpMax;
+    public int HPMax
+    {
+        get { return hpMax; }
+    }
 	[SerializeField]
 	protected string nickname;
+    public string Nickname
+    {
+        get { return nickname; }
+    }
 
 	[SerializeField]
 	protected bool isEnemy;
@@ -33,5 +45,6 @@ public abstract class BattleEntity : MonoBehaviour {
 		if(hp<0) hp=0;
 		if(hp>hpMax) hp = hpMax;
 	}
+
 		
 }
