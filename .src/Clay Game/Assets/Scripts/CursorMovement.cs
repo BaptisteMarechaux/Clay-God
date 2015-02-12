@@ -53,6 +53,7 @@ public class CursorMovement : MonoBehaviour {
                      hoverCharacter.TurnEnded = true;
                      //hoverCharacter.HidePanels();
                      hoverCharacter.HideRangeForAttacking();
+                     moveCount = new Vector2(0, 0);
                      battleMain.battleState = BattleMain.Battlestate.waiting;
                     break;
 
@@ -85,7 +86,7 @@ public class CursorMovement : MonoBehaviour {
                 adVal.x = -1; adVal.y = 0;
                 if (isMovable())
                 {
-                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter || battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
                     {
                         moveCount.x--;
                     }
@@ -99,7 +100,7 @@ public class CursorMovement : MonoBehaviour {
                 adVal.x = 1; adVal.y = 0;
                 if (isMovable())
                 {
-                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter || battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
                         moveCount.x++;
 
                     gameObject.transform.Translate(Vector3.right);
@@ -112,7 +113,7 @@ public class CursorMovement : MonoBehaviour {
                 adVal.x = 0; adVal.y = -1;
                 if (isMovable())
                 {
-                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter || battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
                         moveCount.y--;
 
                     gameObject.transform.Translate(Vector3.back);
@@ -124,7 +125,7 @@ public class CursorMovement : MonoBehaviour {
                 adVal.x = 0; adVal.y = 1;
                 if (isMovable())
                 {
-                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                    if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter || battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
                         moveCount.y++;
 
                     gameObject.transform.Translate(Vector3.forward);
@@ -149,16 +150,24 @@ public class CursorMovement : MonoBehaviour {
 
 	bool isMovable() //Vérifie si on peut encore faire avancer le curseur
 	{
-		if((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Movement)
-			return false;
+        if(battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+        {
+            if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Movement)
+                return false;
+        }
+        else
+        {
+            if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Range)
+                return false;
+        }
+		
 		return true;
 	}
 
     bool isMovableForSelectAttack()
     {
         //Fonction qui va servir a vérifier si on peut déplacer le curseur quand on séléctionne une cible
-        if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Range)
-            return false;
+        
         return true;
     }
 
@@ -175,19 +184,19 @@ public class CursorMovement : MonoBehaviour {
 	{
 		if(col.tag == "Character")
 		{
-			if(battleMain.battleState == BattleMain.Battlestate.waiting)
-			{
-				hoverCharacter = col.GetComponent<BattleUnit>();
+            if (battleMain.battleState == BattleMain.Battlestate.waiting)
+            {
+                   
+                hoverCharacter = col.GetComponent<BattleUnit>();
                 selectedCharTransform = col.transform;
-                if(!hoverCharacter.TurnEnded)
+                if (!hoverCharacter.TurnEnded)
                 {
                     battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
                     RangeDisplay();
-                   
-                }
-			}
 
-           // if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                }
+            }
+
 
 			if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
 			{
@@ -209,10 +218,29 @@ public class CursorMovement : MonoBehaviour {
 				hover = false;
 				battleMain.battleState = BattleMain.Battlestate.waiting;
 			}
-
 		}
 
 	}
+
+    void OnTriggerStay(Collider col)
+    {
+        if (col.tag == "Character")
+        {
+            if (battleMain.battleState == BattleMain.Battlestate.waiting)
+            {
+
+                hoverCharacter = col.GetComponent<BattleUnit>();
+                selectedCharTransform = col.transform;
+                if (!hoverCharacter.TurnEnded)
+                {
+                    battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
+                    RangeDisplay();
+
+                }
+            }
+
+        }
+    }
 
 	void RangeDisplay()
 	{
@@ -246,19 +274,26 @@ public class CursorMovement : MonoBehaviour {
 		if(battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
 		{
             gameObject.transform.position= new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
+            moveCount = new Vector2(0, 0);
             battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
 		}
 
 		if(battleMain.battleState == BattleMain.Battlestate.selectingCharAction)
 		{
             selectedCharTransform.position = originalPos;
-            hoverCharacter.ShowPanels();
+            gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
+            moveCount = new Vector2(0, 0);
             hoverCharacter.HideRangeForAttacking();
+            hoverCharacter.ShowPanels();
+            ActionButtonsGroup.SetActive(false);
 			battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
 		}
 
 		if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
 		{
+            selectedCharTransform.position = originalPos;
+            gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
+            moveCount = new Vector2(0, 0);
 			battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
 		}
 	}

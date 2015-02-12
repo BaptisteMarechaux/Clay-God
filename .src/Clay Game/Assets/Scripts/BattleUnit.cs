@@ -124,6 +124,8 @@ public class BattleUnit : BattleEntity {
                 tmpMvtClone.transform.localPosition = new Vector3(i, -0.49f, j + 1 + i);
 				rangePanels.Add(tmpMvtClone);
 			}
+
+
 		}
 		for(int i=1;i<Range+1;i++)
 		{
@@ -184,6 +186,12 @@ public class BattleUnit : BattleEntity {
 			}
 		}
 		alreadySelected = true;
+        tempRangePanels = new List<GameObject>();
+        for (int i = 0; i < rangePanels.Count; i++)
+        {
+            tempRangePanels.Add(new GameObject());
+            tempRangePanels[i].transform.position = rangePanels[i].transform.position;
+        }
 	}
 
 	public void ShowPanels()
@@ -223,20 +231,20 @@ public class BattleUnit : BattleEntity {
     public void ShowRangeForAttacking()
     {
         int a = 0;
-            tempRangePanels = rangePanels;
-            for (int i = 0; i < Range;i++)
+       
+            for (int i = 0; i < Range; i++)
             {
-                for(int j = range;j > 0;j--)
+                for (int j = range; j > 0; j--)
                 {
-                    rangePanels[a].transform.localPosition = new Vector3(i+1, -0.49f, j-1);
+                    rangePanels[a].transform.localPosition = new Vector3(i + 1, -0.49f, j - 1);
                     a++;
                 }
-                for(int j = 1;j <range-1;j++)
+                for (int j = 1; j < range - 1; j++)
                 {
-                    rangePanels[a].transform.localPosition = new Vector3(i+1, -0.49f, -j);
+                    rangePanels[a].transform.localPosition = new Vector3(i + 1, -0.49f, -j);
                     a++;
                 }
-                
+
             }
        
             for (int i = 0; i > -Range;i--)
@@ -269,13 +277,12 @@ public class BattleUnit : BattleEntity {
         }
     public void HideRangeForAttacking()
     {
-        if(alreadySelected)
-        {
-            for(int i=0;i<rangePanels.Count;i++)
+        
+            for(int i=0;i<tempRangePanels.Count;i++)
             {
+                Debug.Log("Pos" +  tempRangePanels[i].transform.position);
                 rangePanels[i].transform.position = tempRangePanels[i].transform.position;
                 rangePanels[i].gameObject.SetActive(false);
             }
-        }
     }
 }
