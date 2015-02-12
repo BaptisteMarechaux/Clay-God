@@ -17,13 +17,15 @@ public class CursorMovement : MonoBehaviour {
 	private bool hover; //On survole une entité
 	private Transform selectedCharTransform; //Transform de l'entité selectionnée
 	private BattleUnit hoverCharacter; //Entité qui est survolée par le curseur et enventuellement, celle qui est sélectionnée
+    private BattleGod hoverGod; //Dieu qui est survolé par le curseur et plus tard sélectionné
+    private BattleSideKick hoverSideKick;
 	private BattleEntity selectedTarget; //Quand on choisit une cible, c'est la cible en cours quand on a pas encore choisi
 	private Vector2 moveCount=new Vector2(0,0);//Verifie combien de mouvements sont effectués
 	private Vector2 adVal = new Vector2(0,0);//Check is movement is still possible
     private Vector3 originalPos; //Position d'origine que l'on va garder au cas ou le joueur invalide un déplacement
     [SerializeField]
     GameObject ActionButtonsGroup;//Référence le groupe d'UI ou vont apparaitre les bouton d'attaque et d'attente
-
+    private bool isImpossiblePosition; //Variable qui va servir a vérifier si on essaye de placer une unité sur un obstacle 
     bool hurting;
     Color c;
     int ci = 0;
@@ -55,19 +57,24 @@ public class CursorMovement : MonoBehaviour {
                      hoverCharacter.HideRangeForAttacking();
                      moveCount = new Vector2(0, 0);
                      battleMain.battleState = BattleMain.Battlestate.waiting;
+                     battleMain.IsTurnEndedForAll();
                     break;
 
                 case BattleMain.Battlestate.selectingCharAction:
                     break;
 
                 case BattleMain.Battlestate.selectingCharacter:
-                    CharacterMoveValidation();
-                    ActionButtonsGroup.gameObject.SetActive(true);
-                    battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
+                    if(!isImpossiblePosition)
+                    {
+                        CharacterMoveValidation();
+                        ActionButtonsGroup.gameObject.SetActive(true);
+                        battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
+                    } 
                     break;
 
                 case BattleMain.Battlestate.hoverCharacter:
-                    battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
+                    if(!hoverCharacter.IsEnemy)
+                        battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
                     break;
 
             }     
@@ -209,6 +216,8 @@ public class CursorMovement : MonoBehaviour {
 	void OnTriggerExit(Collider col)
 	{
 		if(col.tag == "Character"){
+            if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                isImpossiblePosition = false;
 			if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
 			{
 				if(hoverCharacter.AlreadySelected)
@@ -220,12 +229,20 @@ public class CursorMovement : MonoBehaviour {
 			}
 		}
 
+        if (col.tag == "God")
+        {
+            if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                isImpossiblePosition = false;
+        }
+
 	}
 
     void OnTriggerStay(Collider col)
     {
         if (col.tag == "Character")
         {
+            if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                isImpossiblePosition = true;
             if (battleMain.battleState == BattleMain.Battlestate.waiting)
             {
 
@@ -239,6 +256,17 @@ public class CursorMovement : MonoBehaviour {
                 }
             }
 
+        }
+        if (col.tag == "God")
+        {
+            if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
+                isImpossiblePosition = true;
+        }
+
+        if(col.tag == "God")
+        {
+            if(!hoverGod.TurnEnded)
+                battleMain.battleState = BattleMain.Battlestate.hoverGod;
         }
     }
 
@@ -311,6 +339,8 @@ public class CursorMovement : MonoBehaviour {
         hoverCharacter.HidePanels();
         battleMain.battleState = BattleMain.Battlestate.waiting;
         ActionButtonsGroup.gameObject.SetActive(false);
+
+        battleMain.IsTurnEndedForAll();
     }
 
     public void SetTextInfo()
