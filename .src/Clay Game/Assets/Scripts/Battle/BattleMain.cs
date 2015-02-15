@@ -24,6 +24,12 @@ public class BattleMain : MonoBehaviour {
 
     [SerializeField]
     List<BattleEntity> EnemyEntities;
+
+    [SerializeField]
+    Vector2 TerrainSize;
+
+    public List<List<int>> TerrainMatrix;
+    
 	// Use this for initialization
 	void Start () {
         /*
@@ -33,6 +39,9 @@ public class BattleMain : MonoBehaviour {
 			mobileButtons.SetActive(false);
         */
 		battleState = BattleMain.Battlestate.waiting;
+
+        TerrainMatrix = new List<List<int>>();
+        
 	}
 	
 	// Update is called once per frame
@@ -53,10 +62,7 @@ public class BattleMain : MonoBehaviour {
         if(over)
         {
             Debug.Log("LE TOUR EST TERMINE");
-            for (int i = 0; i < PlayerEntities.Count; i++)
-            {
-                PlayerEntities[i].TurnEnded = false;
-            }
+            battleState = BattleMain.Battlestate.enemyTurn;
         }
     }
 }

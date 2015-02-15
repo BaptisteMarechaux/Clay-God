@@ -129,7 +129,7 @@ public class BattleUnit : BattleEntity {
 		}
 		for(int i=1;i<Range+1;i++)
 		{
-			Debug.Log(Range-i);
+			
 			for(int j=0;j<=Range-i;j++)
 			{
 				tmpMvtClone = (GameObject)Instantiate(rangeObj, new Vector3(-Movement-i, 1, -j), Quaternion.identity);

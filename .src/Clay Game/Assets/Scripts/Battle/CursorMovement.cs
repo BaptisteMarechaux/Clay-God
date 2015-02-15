@@ -224,7 +224,6 @@ public class CursorMovement : MonoBehaviour {
 				{
 					hoverCharacter.HidePanels();
 				}
-				hover = false;
 				battleMain.battleState = BattleMain.Battlestate.waiting;
 			}
 		}
@@ -233,6 +232,11 @@ public class CursorMovement : MonoBehaviour {
         {
             if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
                 isImpossiblePosition = false;
+
+            if (battleMain.battleState == BattleMain.Battlestate.hoverGod)
+            {
+                battleMain.battleState = BattleMain.Battlestate.waiting;
+            }
         }
 
 	}
@@ -265,6 +269,7 @@ public class CursorMovement : MonoBehaviour {
 
         if(col.tag == "God")
         {
+            hoverGod = col.GetComponent<BattleGod>();
             if(!hoverGod.TurnEnded)
                 battleMain.battleState = BattleMain.Battlestate.hoverGod;
         }
