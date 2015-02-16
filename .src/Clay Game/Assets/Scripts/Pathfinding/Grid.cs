@@ -9,6 +9,7 @@ public class Grid : MonoBehaviour {
     Node[,] grid;
     float nodeDiameter;
     int gridSizeX, gridSizeY;
+    public List<Node> path;
 
     void Start()
     {
@@ -28,7 +29,7 @@ public class Grid : MonoBehaviour {
             for(int j=0;j<gridSizeY;j++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (i * nodeDiameter + nodeRadius) + Vector3.forward * (j * nodeDiameter + nodeRadius);
-                bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
+                bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius*0.9f, unwalkableMask));
                 grid[i, j] = new Node(walkable, worldPoint, i, j);
             }
         }
@@ -69,10 +70,11 @@ public class Grid : MonoBehaviour {
         return grid[x, y];
     }
 
-    public List<Node> path;
+   
 
     void OnDrawGizmos()
     {
+        //Fonction pour vérifier si le pathing a bien lieu correctement A EFFACER
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
         if (grid != null)

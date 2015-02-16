@@ -88,8 +88,8 @@ public class PathFinding : MonoBehaviour {
        //Il va falloir changer cette fonction pour bien prendre en compte chacune des cases séparément
 
        if (dstX > dstY)
-           return 14 * dstY + 10 * (dstX - dstY);
-       return 14 * dstX + 10 * (dstY - dstX);
+           return 14 *dstY + 10 * (dstX - dstY);
+       return 14 *dstX + 10 * (dstY - dstX);
 
    }
 	
