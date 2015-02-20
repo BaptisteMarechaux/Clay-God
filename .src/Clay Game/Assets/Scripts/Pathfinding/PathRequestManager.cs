@@ -36,7 +36,7 @@ public class PathRequestManager : MonoBehaviour {
         }
     }
 
-    public void FinishedProcessingPath(Vector3 path, bool success)
+    public void FinishedProcessingPath(Vector3[] path, bool success)
     {
         currenPathRequest.callback(path, success);
         isProcessingPath = false;

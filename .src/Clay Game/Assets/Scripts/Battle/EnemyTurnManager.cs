@@ -7,7 +7,7 @@ public class EnemyTurnManager : MonoBehaviour {
     BattleMain battleMain;
     
 
-    GameObject selectedEnemy;
+    BattleUnit selectedEnemy;
 
     List<Vector3> tempDestinations;
 
@@ -20,13 +20,21 @@ public class EnemyTurnManager : MonoBehaviour {
 	void Update () {
         if (battleMain.battleState == BattleMain.Battlestate.enemyTurn)
         {
-            
+            Move();
         }
 	}
 
     void Move()
     {
 
+        for (int i = 0; i < selectedEnemy.Range; i++)
+        {
+            for (int j = 0; j < selectedEnemy.Range; j++)
+            {
+                //Vector3 worldPoint = worldBottomLeft + Vector3.right * (i * nodeDiameter + nodeRadius) + Vector3.forward * (j * nodeDiameter + nodeRadius);
+                //bool AttackPossible = !(Physics.CheckSphere(worldPoint, nodeRadius * 0.9f, unwalkableMask));
+            }
+        }
     }
 
     void FindDestination(Vector3 destination)

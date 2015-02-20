@@ -44,11 +44,81 @@ public class BattleUnit : BattleEntity {
 	}
 
     private List<GameObject> tempRangePanels;
+
+    public Transform target;
+    private float movementSpeed=2;
+    private Vector3[] path;
+    int targetIndex;
 	
 	// Use this for initialization
 	public override void Start () {
 		base.Start();
+        
+        
+        
 	}
+
+    public void FindPath()
+    {
+        if (isEnemy)
+        {
+            PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+        }
+    }
+
+    public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
+    {
+        if(pathSuccessful)
+        {
+            path = newPath;
+            StopCoroutine("FollowPath");
+            StartCoroutine("FollowPath");
+        }
+    }
+
+    IEnumerator FollowPath()
+    {
+        Vector3 currentWaypoint = path[0];
+
+        while(true)
+        {
+            if(transform.position.x==currentWaypoint.x && transform.position.z == currentWaypoint.z)
+            {
+                targetIndex++;
+                Debug.Log(targetIndex);
+                if(targetIndex >= path.Length)
+                {
+                    yield break;
+                }
+                currentWaypoint = path[targetIndex];
+            }
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentWaypoint.x, transform.position.y, currentWaypoint.z), movementSpeed*Time.deltaTime);
+            yield return null;
+           
+        }
+
+    }
+
+    public void OnDrawGizmos()
+    {
+        if (path != null)
+        {
+            for (int i = targetIndex; i < path.Length; i++)
+            {
+                Gizmos.color = Color.black;
+                Gizmos.DrawCube(path[i], Vector3.one);
+
+                if (i == targetIndex)
+                {
+                    Gizmos.DrawLine(transform.position, path[i]);
+                }
+                else
+                {
+                    Gizmos.DrawLine(path[i - 1], path[i]);
+                }
+            }
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -284,5 +354,10 @@ public class BattleUnit : BattleEntity {
                 rangePanels[i].transform.position = tempRangePanels[i].transform.position;
                 rangePanels[i].gameObject.SetActive(false);
             }
+    }
+
+    public void Attack()
+    {
+
     }
 }

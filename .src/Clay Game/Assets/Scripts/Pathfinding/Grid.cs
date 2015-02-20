@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Grid : MonoBehaviour {
+    public bool displayGridGizmos;
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
     Node[,] grid;
     float nodeDiameter;
     int gridSizeX, gridSizeY;
-    public List<Node> path;
 
-    void Start()
+    void Awake()
     {
         nodeDiameter = nodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
@@ -45,6 +45,8 @@ public class Grid : MonoBehaviour {
             {
                 if (i == 0 && j == 0)
                     continue;
+                if (i !=0 && j != 0)
+                    continue;
                 int checkX = node.gridX + i;
                 int checkY = node.gridY + j;
 
@@ -77,14 +79,11 @@ public class Grid : MonoBehaviour {
         //Fonction pour vérifier si le pathing a bien lieu correctement A EFFACER
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
-        if (grid != null)
+        if (grid != null && displayGridGizmos)
         {
             foreach (Node n in grid)
             {
                 Gizmos.color = (n.walkable) ? Color.white : Color.red;
-                if (path != null)
-                    if (path.Contains(n))
-                        Gizmos.color = Color.blue;
                 Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
             }
         }
