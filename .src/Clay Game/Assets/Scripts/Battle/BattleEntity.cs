@@ -68,6 +68,13 @@ public abstract class BattleEntity : MonoBehaviour {
                 gameObject.SetActive(false);
             }
         }
+        else
+        {
+            if(hp==0)
+            {
+                Application.LoadLevel("GameOverScene");
+            }
+        }
        
 	}
 
