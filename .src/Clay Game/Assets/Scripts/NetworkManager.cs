@@ -4,69 +4,24 @@ using System.Collections.Generic;
 
 public class NetworkManager : MonoBehaviour {
 	
-	//Network Part
+	//Network 
 	public const string _typeName = "TowerDefense";
-	public string _gameName;
+	public string _gameName = "ClayGame";
 	public const int _nbPlayers = 2;
 	private HostData[] _hostData;
 	public static HostData _gameData;
 	private int _port = 6600;
+	public string _serverIP = "127.0.0.1";
+	[SerializeField]
+	Camera _serverCamera;
 
-	//Game
-	public GameObject playerPrefab;
-	
 	void Start()
 	{
+		Application.runInBackground = true;
 	}
+	
 
-	public void SpawnPlayer()
-	{
-
-	}
-
-	void OnGUI ()
-	{
-		
-		// Tout pendant que le réseau n'est pas initialisé
-		if (!(Network.isServer ^ Network.isClient)) {
-			GUILayout.BeginVertical ();
-			
-			GUILayout.BeginHorizontal ();
-			
-			GUILayout.Label ("Server IP : ");
-			
-			_serverIP = GUILayout.TextField (_serverIP);
-			
-			GUILayout.Label ("Server Port : ");
-			
-			_serverPort = GUILayout.TextField (_serverPort);
-			
-			if (GUILayout.Button ("Start Client")) {
-				StartClient ();
-			}
-			GUILayout.EndHorizontal ();
-			
-			GUILayout.BeginHorizontal ();
-			
-			GUILayout.Label ("Number Of Players (1-5) : ");
-			
-			_playerNumber = GUILayout.TextField (_playerNumber);
-			
-			GUILayout.Label ("Server Port : ");
-			
-			_serverPort = GUILayout.TextField (_serverPort);
-			
-			if (GUILayout.Button ("Start Server")) {
-				StartServer ();
-			}
-			
-			GUILayout.EndHorizontal ();
-			
-			GUILayout.EndVertical ();
-		}
-	}
-
-	void OnMasterServerEvent(MasterServerEvent sEvent)
+	public void OnMasterServerEvent(MasterServerEvent sEvent)
 	{
 		if (sEvent == MasterServerEvent.HostListReceived)
 			_hostData = MasterServer.PollHostList();
@@ -74,10 +29,24 @@ public class NetworkManager : MonoBehaviour {
 	
 	public void StartServer()
 	{
-		if (!Network.isClient && !Network.isServer) {
-			Network.InitializeSecurity();
-			Network.InitializeServer (_nbPlayers, _port, !Network.HavePublicAddress ());
-			MasterServer.RegisterHost (_typeName, _gameName);
+		try{
+			if (!Network.isClient && !Network.isServer) {
+				Network.InitializeSecurity();
+				Network.InitializeServer (_nbPlayers, _port, !Network.HavePublicAddress ());
+				MasterServer.RegisterHost (_typeName, _gameName);
+				Debug.Log("Server client connected !");
+			}
+		}catch(UnityException e){
+			Debug.Log (e.Message);
+				}
+	}
+
+	public void StartClient ()
+	{
+		try {
+			Network.Connect (_serverIP,(_port));
+		} catch (UnityException e) {
+			Debug.LogError (e.Message);
 		}
 	}
 	
@@ -100,28 +69,33 @@ public class NetworkManager : MonoBehaviour {
 		public void JoinServer(HostData _gameToJoin)
 		{
 			_gameData = _gameToJoin; //Les données qui correspondent à la partie qu'on veut rejoindre
-			Application.LoadLevel(""); //Le niveau à charger
+		Application.LoadLevel("TacticalMovementTestScene"); //Le niveau à charger
 		}
 		
 		
-		public void OnConnectedToServer()
+		public void OnConnectedToServer() // Connexion du client
 		{
 			Debug.Log("Connected to server");
-			Application.LoadLevel("");//Le niveau à charger
+			Application.LoadLevel("TacticalMovementTestScene");//Le niveau à charger
 		}
 		
-		public void OnFailedToConnectToMasterServer(NetworkConnectionError exception)
+		void OnServerInitialized() // Connexion du client
+		{ 
+			Application.LoadLevel("TacticalMovementTestScene");  
+		}
+		
+		public void OnFailedToConnectToMasterServer(NetworkConnectionError exception) // Erreur à la connexion du master server
 		{
 			Debug.Log("Fail to connect master server : " + exception);
 		}
 		
-		public void OnFailedToConnect(NetworkConnectionError exception)
+		public void OnFailedToConnect(NetworkConnectionError exception) // Erreur à la connexion au serveur
 		{
 			Debug.Log("Fail to connect server: " + exception);
 		}
 		
 		
-		public void OnPlayerConnected(NetworkPlayer player) //Server
+		public void OnPlayerConnected() // Connexion Server
 		{
 			Debug.Log("Connected !");
 			

@@ -46,7 +46,7 @@ public class BattleMain : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log(battleState);
+		//Debug.Log(battleState);
 	}
 
     public void IsTurnEndedForAll()
