@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class CursorMovement : MonoBehaviour {
+    //Script qui va gérer tout le mouvement du curseur
 	[SerializeField]
 	private BattleMain battleMain;
 	[SerializeField]
@@ -20,6 +21,7 @@ public class CursorMovement : MonoBehaviour {
     private BattleGod hoverGod; //Dieu qui est survolé par le curseur et plus tard sélectionné
     private BattleSideKick hoverSideKick;
 	private BattleEntity selectedTarget; //Quand on choisit une cible, c'est la cible en cours quand on a pas encore choisi
+    private Collider selectedCollider; //Collider qu'on touche quand on sélectionne une entité pour une attaque
 	private Vector2 moveCount=new Vector2(0,0);//Verifie combien de mouvements sont effectués
 	private Vector2 adVal = new Vector2(0,0);//Check is movement is still possible
     private Vector3 originalPos; //Position d'origine que l'on va garder au cas ou le joueur invalide un déplacement
@@ -51,6 +53,7 @@ public class CursorMovement : MonoBehaviour {
             switch(battleMain.battleState)
             {
                 case BattleMain.Battlestate.selectingAtkTarget:
+                    selectedTarget = selectedCollider.GetComponent<BattleEntity>();
                     selectedTarget.ChangeHP(-hoverCharacter.Power);
                      hoverCharacter.TurnEnded = true;
                      //hoverCharacter.HidePanels();
@@ -205,10 +208,7 @@ public class CursorMovement : MonoBehaviour {
             }
 
 
-			if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
-			{
-				selectedTarget = col.GetComponent<BattleEntity>();
-			}
+			
 
 		}
 	}
@@ -272,6 +272,11 @@ public class CursorMovement : MonoBehaviour {
             hoverGod = col.GetComponent<BattleGod>();
             if(!hoverGod.TurnEnded)
                 battleMain.battleState = BattleMain.Battlestate.hoverGod;
+        }
+
+        if (battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
+        {
+            selectedCollider = col;
         }
     }
 

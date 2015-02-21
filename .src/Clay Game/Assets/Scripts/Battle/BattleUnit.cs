@@ -44,8 +44,10 @@ public class BattleUnit : BattleEntity {
 	}
 
     private List<GameObject> tempRangePanels;
-
+    
     public Transform target;
+    public TargetDetection targetSelector;
+    [SerializeField]
     private float movementSpeed=2;
     private Vector3[] path;
     int targetIndex;
@@ -53,15 +55,13 @@ public class BattleUnit : BattleEntity {
 	// Use this for initialization
 	public override void Start () {
 		base.Start();
-        
-        
-        
 	}
 
     public void FindPath()
     {
         if (isEnemy)
         {
+            Debug.Log("C'est le moment de choisir un chemin!");
             PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
         }
     }
@@ -350,7 +350,7 @@ public class BattleUnit : BattleEntity {
         
             for(int i=0;i<tempRangePanels.Count;i++)
             {
-                Debug.Log("Pos" +  tempRangePanels[i].transform.position);
+                //Debug.Log("Pos" +  tempRangePanels[i].transform.position);
                 rangePanels[i].transform.position = tempRangePanels[i].transform.position;
                 rangePanels[i].gameObject.SetActive(false);
             }
@@ -360,4 +360,6 @@ public class BattleUnit : BattleEntity {
     {
 
     }
+
+    
 }

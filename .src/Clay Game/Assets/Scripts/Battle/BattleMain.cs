@@ -19,28 +19,23 @@ public class BattleMain : MonoBehaviour {
 	[SerializeField]
 	GameObject mobileButtons;
 
-    [SerializeField]
-    List<BattleEntity> PlayerEntities;
+    public List<BattleUnit> PlayerEntities;
 
-    [SerializeField]
-    List<BattleEntity> EnemyEntities;
+    public List<BattleUnit> EnemyEntities;
 
-    [SerializeField]
-    Vector2 TerrainSize;
+    public EnemyTurnManager enemyTurnManager;
 
-    public List<List<int>> TerrainMatrix;
-    
+    public GameObject pTurn, eTurn;
+
 	// Use this for initialization
 	void Start () {
-        /*
+        
 		if (Application.platform == RuntimePlatform.Android)
 			mobileButtons.SetActive(true);
 		else
 			mobileButtons.SetActive(false);
-        */
+        
 		battleState = BattleMain.Battlestate.waiting;
-
-        TerrainMatrix = new List<List<int>>();
         
 	}
 	
@@ -62,7 +57,14 @@ public class BattleMain : MonoBehaviour {
         if(over)
         {
             Debug.Log("LE TOUR EST TERMINE");
+            eTurn.SetActive(true);
             battleState = BattleMain.Battlestate.enemyTurn;
+            for (int i = 0; i < EnemyEntities.Count;i++ )
+            {
+                EnemyEntities[i].target = PlayerEntities[Random.Range(0, PlayerEntities.Count - 1)].transform;
+            }
+            enemyTurnManager.enabled = true;
+
         }
     }
 }
