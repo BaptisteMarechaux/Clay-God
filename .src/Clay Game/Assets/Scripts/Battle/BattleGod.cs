@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class BattleGod : BattleEntity {
     [SerializeField]
+    BattleMain battleMain;
+
+    [SerializeField]
     public GameObject SpecialPowerEffect;
 
     private int CP; //Custom Points : Points servant à customiser le Dieu
@@ -21,10 +24,17 @@ public class BattleGod : BattleEntity {
 	
 	// Update is called once per frame
 	void Update () {
-        if (hp <= 0)
-            Defeat();
+        
            
 	}
+
+    public override void ChangeHP(int amount)
+    {
+        base.ChangeHP(amount);
+
+        if (hp <= 0)
+            Defeat();
+    }
 
     public void InvokeUnit(BattleUnit UnitType)
     {
@@ -44,6 +54,15 @@ public class BattleGod : BattleEntity {
 
     public void Defeat()
     {
-        Debug.Log("C'est perdu !");
+        if(!isEnemy)
+        {
+            battleMain.Defeat();
+        }
+        else
+        {
+            //Victory
+            battleMain.Victory();
+        }
+        
     }
 }

@@ -26,6 +26,7 @@ public class WaitForDeactivation : MonoBehaviour {
         else
         {
             t = 0;
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 1);
             this.gameObject.SetActive(false);
         }
 	}

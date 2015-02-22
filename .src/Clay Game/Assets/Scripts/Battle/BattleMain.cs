@@ -11,7 +11,8 @@ public class BattleMain : MonoBehaviour {
 		selectingAtkTarget,
 		enemyTurn,
         hoverGod,
-        hoverSideKick
+        hoverSideKick,
+        placingUnit
 	};
 
 	public Battlestate battleState;
@@ -33,7 +34,7 @@ public class BattleMain : MonoBehaviour {
 
     public EnemyTurnManager enemyTurnManager;
 
-    public GameObject pTurn, eTurn;
+    public GameObject pTurn, eTurn, Vic, Defe;
 
 	// Use this for initialization
 	void Start () {
@@ -58,7 +59,7 @@ public class BattleMain : MonoBehaviour {
         for(int i=0;i<PlayerEntities.Count;i++)
         {
             //Verifie si chaque entité du joueur a deja joué son tour
-            if (!PlayerEntities[i].TurnEnded)
+            if (!PlayerEntities[i].TurnEnded && PlayerEntities[i].gameObject.activeSelf)
                 over = false;
         }
 
@@ -66,6 +67,7 @@ public class BattleMain : MonoBehaviour {
         {
             Debug.Log("LE TOUR EST TERMINE");
             eTurn.SetActive(true);
+            
             battleState = BattleMain.Battlestate.enemyTurn;
             for (int i = 0; i < EnemyEntities.Count;i++ )
             {
@@ -82,7 +84,7 @@ public class BattleMain : MonoBehaviour {
         for (int i = 0; i < EnemyEntities.Count; i++)
         {
             //Verifie si chaque entité du joueur a deja joué son tour
-            if (!EnemyEntities[i].TurnEnded)
+            if (!EnemyEntities[i].TurnEnded && EnemyEntities[i].gameObject.activeSelf)
                 over = false;
         }
 
@@ -98,5 +100,15 @@ public class BattleMain : MonoBehaviour {
             enemyTurnManager.enabled = false;
 
         }
+    }
+
+    public void Victory()
+    {
+        Vic.SetActive(true);
+    }
+
+    public void Defeat()
+    {
+        Defe.SetActive(true);
     }
 }

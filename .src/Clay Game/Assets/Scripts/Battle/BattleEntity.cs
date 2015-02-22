@@ -60,21 +60,6 @@ public abstract class BattleEntity : MonoBehaviour {
 		hp+=amount;
 		if(hp<0) hp=0;
 		if(hp>hpMax) hp = hpMax;
-
-        if(!(this is BattleGod))
-        {
-            if (hp == 0)
-            {
-                gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            if(hp==0)
-            {
-                Application.LoadLevel("GameOverScene");
-            }
-        }
        
 	}
 

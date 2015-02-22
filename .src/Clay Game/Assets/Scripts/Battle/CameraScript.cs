@@ -29,7 +29,7 @@ public class CameraScript : MonoBehaviour {
 	{
         if (battleMain.battleState == BattleMain.Battlestate.enemyTurn)
         {
-            return new Vector3(target.position.x, transform.position.y, target.position.z - 6);
+            return new Vector3(target.position.x, transform.position.y, target.position.z - 3);
         }
 		return new Vector3(target.position.x, transform.position.y, target.position.z-3);
 

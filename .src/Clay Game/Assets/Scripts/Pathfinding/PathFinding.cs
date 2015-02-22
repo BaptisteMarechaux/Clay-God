@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System;
 
 public class PathFinding : MonoBehaviour {
-    public Transform seeker, target;
+    //public Transform seeker, target;
     Grid grid;
 
     PathRequestManager requestManager;
@@ -17,7 +17,7 @@ public class PathFinding : MonoBehaviour {
 
     void Update()
     {
-        FindPath(seeker.position, target.position);
+       // FindPath(seeker.position, target.position);
     }
 
     public void StartFindPath(Vector3 startPos, Vector3 targetPos)

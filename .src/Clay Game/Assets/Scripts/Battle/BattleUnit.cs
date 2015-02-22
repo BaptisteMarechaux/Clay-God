@@ -356,9 +356,13 @@ public class BattleUnit : BattleEntity {
             }
     }
 
-    public void Attack()
+    public override void ChangeHP(int amount)
     {
-
+        base.ChangeHP(amount);
+        if(hp <= 0)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     

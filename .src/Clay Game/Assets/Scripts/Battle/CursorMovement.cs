@@ -54,13 +54,16 @@ public class CursorMovement : MonoBehaviour {
             {
                 case BattleMain.Battlestate.selectingAtkTarget:
                     selectedTarget = selectedCollider.GetComponent<BattleEntity>();
-                    selectedTarget.ChangeHP(-hoverCharacter.Power);
-                     hoverCharacter.TurnEnded = true;
-                     //hoverCharacter.HidePanels();
-                     hoverCharacter.HideRangeForAttacking();
-                     moveCount = new Vector2(0, 0);
-                     battleMain.battleState = BattleMain.Battlestate.waiting;
-                     battleMain.IsTurnEndedForAll();
+                    if(selectedTarget.IsEnemy)
+                    {
+                        selectedTarget.ChangeHP(-hoverCharacter.Power);
+                        hoverCharacter.TurnEnded = true;
+                        //hoverCharacter.HidePanels();
+                        hoverCharacter.HideRangeForAttacking();
+                        moveCount = new Vector2(0, 0);
+                        battleMain.battleState = BattleMain.Battlestate.waiting;
+                        battleMain.IsTurnEndedForAll();
+                    }
                     break;
 
                 case BattleMain.Battlestate.selectingCharAction:
@@ -78,6 +81,11 @@ public class CursorMovement : MonoBehaviour {
                 case BattleMain.Battlestate.hoverCharacter:
                     if(!hoverCharacter.IsEnemy)
                         battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
+                    break;
+
+                case BattleMain.Battlestate.hoverGod:
+                    if (!hoverGod.IsEnemy)
+                        battleMain.battleState = BattleMain.Battlestate.placingUnit;
                     break;
 
             }     
@@ -206,11 +214,17 @@ public class CursorMovement : MonoBehaviour {
 
                 }
             }
-
-
-			
-
 		}
+
+        if (col.tag == "God")
+        {
+            if (battleMain.battleState == BattleMain.Battlestate.waiting)
+            {
+                hoverGod = col.GetComponent<BattleGod>();
+                if (!hoverGod.TurnEnded)
+                    battleMain.battleState = BattleMain.Battlestate.hoverGod;
+            }
+        }
 	}
 
 	void OnTriggerExit(Collider col)
@@ -246,7 +260,11 @@ public class CursorMovement : MonoBehaviour {
         if (col.tag == "Character")
         {
             if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
-                isImpossiblePosition = true;
+            {
+                if(col != hoverCharacter.collider)
+                    isImpossiblePosition = true;
+            }
+                
             if (battleMain.battleState == BattleMain.Battlestate.waiting)
             {
 
@@ -267,12 +285,7 @@ public class CursorMovement : MonoBehaviour {
                 isImpossiblePosition = true;
         }
 
-        if(col.tag == "God")
-        {
-            hoverGod = col.GetComponent<BattleGod>();
-            if(!hoverGod.TurnEnded)
-                battleMain.battleState = BattleMain.Battlestate.hoverGod;
-        }
+        
 
         if (battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
         {
