@@ -1,0 +1,15 @@
+TODO
+
+Actuellement, on peut seulement déplacer les unités , c'est à dire les simples cubes
+
+
+Créer les SideKicks et leurs commandes
+
+Faire en sorte que les ennemis puissent mieux se déplacer
+	Jusqu'au nombre limite de cases(pas intégré)
+	Les empecher de passer a travers les joueurs (intégré, non fonctionnel)
+	Qu'ils attaquent ensuite ce qui est à portée (intégré, non fonctionnel)
+	
+Donner des actions a effectuer aux GODs
+
+Faire une machine a voyager dans le temps

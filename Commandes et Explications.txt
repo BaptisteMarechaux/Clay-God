@@ -1,0 +1,35 @@
+Commandes et Explications
+
+Le jeu n'est pas fini et souffre de nombreux désagréments non prévus à la base
+
+Il se déroule normalement comme suit :
+
+ECRAN TITRE 
+	On clique sur Start Server si on est le premier joueur
+	On clique sur Join Party si un serveur est deja créé
+	Le jeu ne peut se jouer qu'a deux
+	
+JEU
+	La caméra ne suit pas le 2e joueur, et aucun état ne s'adapte à lui, il est juste spectateur des actions du joueur 1
+	PHASE JOUEUR
+	On peut sélectionner des units (Cubes bleus) et attaquer tous les ennemis en rouge
+	La premiere unité survolée est tres puissante et permet de vérifier la condition de victoire si on attaque le God adverse (Càd, le cube avec une Sphere rouge)
+	
+	PHASE Ennemie
+	La phase ennemie ne se déroule pas comme prévu
+	Elle sera donc tres momentanée : on considere que les ennemis attaquent tous les un a la suite des autre, le God allié
+	Si le God allié subit trop d'attaque, on perd
+	
+	Victoire ou défaite : on retourne a l'écran titre
+
+On Déplace Le curseur et par conséquent les unités avec 
+Z/Q/S/D et les flèches directionelles HAUT, BAS, DROITE, GAUCHE 
+
+On peut valider avec :
+X, ENTREE, ESPACE
+
+On peut annuler une action avec :
+C, ECHAP, RETOURARRIERE
+
+Sélection d'une action quand on a déplacé une unité :
+On doit utiliser la souris pour choisir entre Attaquer et attendre la fin du tour quand on a utilisé une unité
