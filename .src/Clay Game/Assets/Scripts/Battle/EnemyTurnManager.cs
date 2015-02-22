@@ -20,6 +20,7 @@ public class EnemyTurnManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        /*
        if(battleMain.battleState == BattleMain.Battlestate.enemyTurn)
        {
            if(selectedEnemy.TurnEnded)
@@ -27,12 +28,21 @@ public class EnemyTurnManager : MonoBehaviour {
                AttackCheck();
            }
        }
+         * */
 	}
 
     void OnEnable()
     {
         enemyCount = battleMain.EnemyEntities.Count;
-        Move();
+        for (int i = 0; i < enemyCount;i++ )
+        {
+            battleMain.EnemyEntities[i].target.GetComponent<BattleEntity>().ChangeHP(-battleMain.EnemyEntities[i].Power);
+            battleMain.EnemyEntities[i].TurnEnded = true;
+        }
+        battleMain.EnemyTurnEnd();
+        gameObject.SetActive(false);
+            
+        //Move();
     }
 
     void Move()
@@ -43,7 +53,8 @@ public class EnemyTurnManager : MonoBehaviour {
              if(battleMain.EnemyEntities[a].TurnEnded == false)
              {
                  selectedEnemy = battleMain.EnemyEntities[a];
-                 selectedEnemy.FindPath();
+                 AttackCheck();
+                 //selectedEnemy.FindPath();
 
 
              }
@@ -60,10 +71,11 @@ public class EnemyTurnManager : MonoBehaviour {
                     for (int j = (Mathf.Abs(i) - selectedEnemy.Range); j <= selectedEnemy.Range - Mathf.Abs(i); j += 1)
                     {
                         //selectedEnemy.targetSelector.transform.position = new Vector3(i, 0, j);
-                        if(selectedEnemy.target.position.x == (i + transform.position.x) && selectedEnemy.target.position.z == (j+transform.position.z))
+                       /* if(selectedEnemy.target.position.x == (i + transform.position.x) && selectedEnemy.target.position.z == (j+transform.position.z))
                         {
                             okAttack = true;
-                        }
+                        }*/
+                        okAttack = true;
                     }
 
                 }
@@ -71,11 +83,11 @@ public class EnemyTurnManager : MonoBehaviour {
         {
             selectedEnemy.target.GetComponent<BattleUnit>().ChangeHP(-selectedEnemy.Power);
         }
-
+        selectedEnemy.TurnEnded = true;
         battleMain.IsTurnEndedForEnemies();
         a++;
-        if(this.gameObject.activeSelf)
-            Move();
+        if(this.gameObject.activeSelf && battleMain.EnemyEntities.Count <= a)
+           Move();
     }
 
     void FindDestination(Vector3 destination)

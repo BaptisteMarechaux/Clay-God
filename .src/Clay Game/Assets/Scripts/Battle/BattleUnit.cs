@@ -99,6 +99,7 @@ public class BattleUnit : BattleEntity {
 
     }
 
+    /*
     public void OnDrawGizmos()
     {
         if (path != null)
@@ -119,7 +120,7 @@ public class BattleUnit : BattleEntity {
             }
         }
     }
-	
+	*/
 	// Update is called once per frame
 	void Update () {
 		

@@ -17,7 +17,7 @@ public class NetworkManager : MonoBehaviour {
 
 	void Start()
 	{
-		Application.runInBackground = true;
+        MasterServer.RequestHostList(typeName);
 	}
 	
 
@@ -66,9 +66,16 @@ public class NetworkManager : MonoBehaviour {
 		}
 	}
 		
-		public void JoinServer(HostData gameToJoin)
+		public void JoinServer(/*HostData gameToJoin*/)
 		{
-			GameToJoin = gameToJoin; //Les données qui correspondent à la partie qu'on veut rejoindre
+			//GameToJoin = gameToJoin; //Les données qui correspondent à la partie qu'on veut rejoindre
+            
+            for (int i = 0, l = hostData.Length; i < l; i++)
+            {
+                if(hostData[i]!=null)
+                    GameToJoin = hostData[i];
+            }
+            
 		    Application.LoadLevel("TacticalMovementTestScene"); //Le niveau à charger
 		}
 		
@@ -100,6 +107,6 @@ public class NetworkManager : MonoBehaviour {
 			Debug.Log("Connected !");
 			
 		}
-		
-		
+
+       
 	}

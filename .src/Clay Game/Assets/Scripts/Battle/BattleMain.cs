@@ -61,6 +61,7 @@ public class BattleMain : MonoBehaviour {
         if(NetworkManager.GameToJoin != null)
         {
             index = NetworkManager.GameToJoin.connectedPlayers;
+            Debug.Log(index);
         }
         battleCamera.target = cursors[index].transform;
     }
@@ -97,10 +98,13 @@ public class BattleMain : MonoBehaviour {
             eTurn.SetActive(true);
             
             battleState = BattleMain.Battlestate.enemyTurn;
+           
             for (int i = 0; i < EnemyEntities.Count;i++ )
             {
-                EnemyEntities[i].target = PlayerEntities[Random.Range(0, PlayerEntities.Count - 1)].transform;
+                //EnemyEntities[i].target = PlayerEntities[Random.Range(0, PlayerEntities.Count - 1)].transform;
+                EnemyEntities[i].target = PlayerGodEntities[0].transform;
             }
+             
             enemyTurnManager.enabled = true;
 
         }
@@ -108,12 +112,12 @@ public class BattleMain : MonoBehaviour {
 
     public void IsTurnEndedForEnemies() //Verifie si le tour de chaque unité est terminé puis lance la phase ennemie en conséquence
     {
-        bool over = true; //vrai si le tour doit etre fini , faux sinon
+        bool over=false; //vrai si le tour doit etre fini , faux sinon
         for (int i = 0; i < EnemyEntities.Count; i++)
         {
             //Verifie si chaque entité du joueur a deja joué son tour
-            if (!EnemyEntities[i].TurnEnded && EnemyEntities[i].gameObject.activeSelf)
-                over = false;
+            if (EnemyEntities[i].TurnEnded && EnemyEntities[i].gameObject.activeSelf)
+                over = true;
         }
 
         if (over)
@@ -122,12 +126,24 @@ public class BattleMain : MonoBehaviour {
            pTurn.SetActive(true);
            for (int i = 0; i < PlayerEntities.Count; i++)
            {
-               PlayerEntities[i].TurnEnded = true;
+               PlayerEntities[i].TurnEnded = false;
            }
             battleState = BattleMain.Battlestate.waiting;
             enemyTurnManager.enabled = false;
 
         }
+    }
+
+    public void EnemyTurnEnd()
+    {
+        Debug.Log("LE TOUR ENNEMI EST TERMINE");
+        pTurn.SetActive(true);
+        for (int i = 0; i < PlayerEntities.Count; i++)
+        {
+            PlayerEntities[i].TurnEnded = false;
+        }
+        battleState = BattleMain.Battlestate.waiting;
+        enemyTurnManager.enabled = false;
     }
 
     public void Victory()
