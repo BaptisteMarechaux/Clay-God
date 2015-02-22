@@ -309,31 +309,32 @@ public class CursorMovement : MonoBehaviour {
 	
 	void Canceling()
 	{
-		if(battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
-		{
-            gameObject.transform.position= new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
-            moveCount = new Vector2(0, 0);
-            battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
-		}
+        switch (battleMain.battleState)
+        {
+            case BattleMain.Battlestate.selectingAtkTarget:
+                gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
+                moveCount = new Vector2(0, 0);
+                ActionButtonsGroup.gameObject.SetActive(true);
+			    battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
+                break;
 
-		if(battleMain.battleState == BattleMain.Battlestate.selectingCharAction)
-		{
-            selectedCharTransform.position = originalPos;
-            gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
-            moveCount = new Vector2(0, 0);
-            hoverCharacter.HideRangeForAttacking();
-            hoverCharacter.ShowPanels();
-            ActionButtonsGroup.SetActive(false);
-			battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
-		}
+            case BattleMain.Battlestate.selectingCharacter:
+                gameObject.transform.position= new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
+                moveCount = new Vector2(0, 0);
+                battleMain.battleState = BattleMain.Battlestate.hoverCharacter;
+                break;
 
-		if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
-		{
-            selectedCharTransform.position = originalPos;
-            gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
-            moveCount = new Vector2(0, 0);
-			battleMain.battleState = BattleMain.Battlestate.selectingCharAction;
-		}
+            case BattleMain.Battlestate.selectingCharAction:
+                selectedCharTransform.position = originalPos;
+                gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
+                moveCount = new Vector2(0, 0);
+                hoverCharacter.HideRangeForAttacking();
+                hoverCharacter.ShowPanels();
+                ActionButtonsGroup.SetActive(false);
+			    battleMain.battleState = BattleMain.Battlestate.selectingCharacter;
+                break;
+
+        }
 	}
 
     public void SelectAttack()

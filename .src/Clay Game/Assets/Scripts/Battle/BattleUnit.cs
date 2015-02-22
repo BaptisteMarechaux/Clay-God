@@ -43,7 +43,7 @@ public class BattleUnit : BattleEntity {
 		get{ return rangePanels;}
 	}
 
-    private List<GameObject> tempRangePanels;
+    private List<Vector3> tempRangePanels;
     
     public Transform target;
     public TargetDetection targetSelector;
@@ -61,7 +61,6 @@ public class BattleUnit : BattleEntity {
     {
         if (isEnemy)
         {
-            Debug.Log("C'est le moment de choisir un chemin!");
             PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
         }
     }
@@ -85,10 +84,11 @@ public class BattleUnit : BattleEntity {
             if(transform.position.x==currentWaypoint.x && transform.position.z == currentWaypoint.z)
             {
                 targetIndex++;
-                Debug.Log(targetIndex);
                 if(targetIndex >= path.Length)
                 {
+                    TurnEnded = true;
                     yield break;
+                    
                 }
                 currentWaypoint = path[targetIndex];
             }
@@ -256,11 +256,11 @@ public class BattleUnit : BattleEntity {
 			}
 		}
 		alreadySelected = true;
-        tempRangePanels = new List<GameObject>();
+        tempRangePanels = new List<Vector3>();
         for (int i = 0; i < rangePanels.Count; i++)
         {
-            tempRangePanels.Add(new GameObject());
-            tempRangePanels[i].transform.position = rangePanels[i].transform.position;
+            tempRangePanels.Add(rangePanels[i].transform.position);
+            //tempRangePanels[i].transform.position = rangePanels[i].transform.position;
         }
 	}
 
@@ -351,7 +351,7 @@ public class BattleUnit : BattleEntity {
             for(int i=0;i<tempRangePanels.Count;i++)
             {
                 //Debug.Log("Pos" +  tempRangePanels[i].transform.position);
-                rangePanels[i].transform.position = tempRangePanels[i].transform.position;
+                rangePanels[i].transform.position = tempRangePanels[i];
                 rangePanels[i].gameObject.SetActive(false);
             }
     }

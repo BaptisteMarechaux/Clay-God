@@ -23,6 +23,14 @@ public class BattleMain : MonoBehaviour {
 
     public List<BattleUnit> EnemyEntities;
 
+    public List<BattleGod> PlayerGodEntities;
+
+    public List<BattleGod> EnemyGodEntities;
+
+    public List<BattleSideKick> PlayerSideKickEntities;
+
+    public List<BattleSideKick> EnemySideKickEntities;
+
     public EnemyTurnManager enemyTurnManager;
 
     public GameObject pTurn, eTurn;
@@ -44,7 +52,7 @@ public class BattleMain : MonoBehaviour {
 		Debug.Log(battleState);
 	}
 
-    public void IsTurnEndedForAll()
+    public void IsTurnEndedForAll() //Verifie si le tour de chaque unité est terminé puis lance la phase ennemie en conséquence
     {
         bool over=true; //vrai si le tour doit etre fini , faux sinon
         for(int i=0;i<PlayerEntities.Count;i++)
@@ -64,6 +72,30 @@ public class BattleMain : MonoBehaviour {
                 EnemyEntities[i].target = PlayerEntities[Random.Range(0, PlayerEntities.Count - 1)].transform;
             }
             enemyTurnManager.enabled = true;
+
+        }
+    }
+
+    public void IsTurnEndedForEnemies() //Verifie si le tour de chaque unité est terminé puis lance la phase ennemie en conséquence
+    {
+        bool over = true; //vrai si le tour doit etre fini , faux sinon
+        for (int i = 0; i < EnemyEntities.Count; i++)
+        {
+            //Verifie si chaque entité du joueur a deja joué son tour
+            if (!EnemyEntities[i].TurnEnded)
+                over = false;
+        }
+
+        if (over)
+        {
+            Debug.Log("LE TOUR ENNEMI EST TERMINE");
+           pTurn.SetActive(true);
+           for (int i = 0; i < PlayerEntities.Count; i++)
+           {
+               PlayerEntities[i].TurnEnded = true;
+           }
+            battleState = BattleMain.Battlestate.waiting;
+            enemyTurnManager.enabled = false;
 
         }
     }
