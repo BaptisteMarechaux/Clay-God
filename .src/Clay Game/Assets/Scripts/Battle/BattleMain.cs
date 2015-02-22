@@ -20,6 +20,11 @@ public class BattleMain : MonoBehaviour {
 	[SerializeField]
 	GameObject mobileButtons;
 
+    [SerializeField]
+    CameraScript battleCamera;
+
+    public List<CursorMovement> cursors;
+
     public List<BattleUnit> PlayerEntities;
 
     public List<BattleUnit> EnemyEntities;
@@ -37,8 +42,31 @@ public class BattleMain : MonoBehaviour {
     public GameObject pTurn, eTurn, Vic, Defe;
 
 	// Use this for initialization
+
+    void Awake()
+    {
+        if (Network.isServer)
+        {
+
+        }
+        else
+        {
+            Network.Connect(NetworkManager.GameToJoin);
+        }
+    }
+
+    void OnConnectedToServer()
+    {
+        int index = 0;
+        if(NetworkManager.GameToJoin != null)
+        {
+            index = NetworkManager.GameToJoin.connectedPlayers;
+        }
+        battleCamera.target = cursors[index].transform;
+    }
 	void Start () {
         
+
 		if (Application.platform == RuntimePlatform.Android)
 			mobileButtons.SetActive(true);
 		else

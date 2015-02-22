@@ -34,6 +34,9 @@ public class CursorMovement : MonoBehaviour {
 
     [SerializeField]
     Text importantText;
+
+    [SerializeField]
+    NetworkView ntView;
     
 	// Use this for initialization
 	void Start () {
@@ -42,8 +45,10 @@ public class CursorMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        InputManagment();
-
+        if(ntView.isMine)
+        {
+            InputManagment();
+        }
 	}
 
     void InputManagment()

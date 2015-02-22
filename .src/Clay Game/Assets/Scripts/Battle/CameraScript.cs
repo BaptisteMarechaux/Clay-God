@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class CameraScript : MonoBehaviour {
-	[SerializeField]
-	private Transform target;
+	public Transform target;
 	[SerializeField]
 	private float speed = 10;
     [SerializeField]
