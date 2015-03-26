@@ -89,6 +89,7 @@ public class PathFinding : MonoBehaviour {
         requestManager.FinishedProcessingPath(wayPoints, pathSucces);
     }
 
+
     Vector3[] RetracePath(Node startNode, Node endNode)
     {
         List<Node> path = new List<Node>();
@@ -99,6 +100,8 @@ public class PathFinding : MonoBehaviour {
             currentNode = currentNode.parent;
         }
 
+        
+
         Vector3[] waypoints = SimplifyPath(path);
         Array.Reverse(waypoints);
 
@@ -106,19 +109,21 @@ public class PathFinding : MonoBehaviour {
 
     }
 
+   
+
     Vector3[] SimplifyPath(List<Node> path)
     {
         List<Vector3> waypoints = new List<Vector3>();
         Vector2 directionOld = Vector2.zero;
 
-        for(int i=1;i<path.Count;i++)
+        for(int i=0;i<path.Count;i++)
         {
-            Vector2 directionNew = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
+            //Vector2 directionNew = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
             //if(directionNew != directionOld)
            // {
                 waypoints.Add(path[i].worldPosition);
             //}
-            directionOld = directionNew;
+            //directionOld = directionNew;
         }
         return waypoints.ToArray();
     }
@@ -128,11 +133,9 @@ public class PathFinding : MonoBehaviour {
        int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
        int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
 
-       //Il va falloir changer cette fonction pour bien prendre en compte chacune des cases séparément
+       print(dstX+dstY);
 
-       if (dstX > dstY)
-           return 14 *dstY + 10 * (dstX - dstY);
-       return 14 *dstX + 10 * (dstY - dstX);
+       return dstX + dstX;
 
    }
 

@@ -45,10 +45,10 @@ public class CursorMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(ntView.isMine)
-        {
+        //if(ntView.isMine)
+        //{
             InputManagment();
-        }
+        //}
 	}
 
     void InputManagment()
@@ -266,7 +266,7 @@ public class CursorMovement : MonoBehaviour {
         {
             if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
             {
-                if(col != hoverCharacter.collider)
+                if(col != hoverCharacter.GetComponent<Collider>())
                     isImpossiblePosition = true;
             }
                 

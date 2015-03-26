@@ -7,8 +7,8 @@ public class Node{
     public int gridX;
     public int gridY;
 
-    public int gCost;
-    public int hCost;
+    public int gCost; //Cout par rapport à la grille pour atteindre un noeud suivant
+    public int hCost; //Cout par rapport à une heuristique pour atteindre une cible
     public Node parent;
 
     public Node(bool isWalkable, Vector3 worldPos, int GridX, int GridY)
@@ -21,6 +21,7 @@ public class Node{
 
     public int fCost
     {
+        //Renvoie le cout final : le cout réel par rapport à la grille G plus le cout avec l'heuristique H
         get
         {
             return gCost + hCost;

@@ -51,7 +51,7 @@ public class BattleMain : MonoBehaviour {
         }
         else
         {
-            Network.Connect(NetworkManager.GameToJoin);
+            //Network.Connect(NetworkManager.GameToJoin);
         }
     }
 
@@ -128,7 +128,11 @@ public class BattleMain : MonoBehaviour {
            {
                PlayerEntities[i].TurnEnded = false;
            }
-            battleState = BattleMain.Battlestate.waiting;
+           for (int i = 0; i < EnemyEntities.Count;i++ )
+           {
+               EnemyEntities[i].TurnEnded = false;
+           }
+               battleState = BattleMain.Battlestate.waiting;
             enemyTurnManager.enabled = false;
 
         }
@@ -141,6 +145,10 @@ public class BattleMain : MonoBehaviour {
         for (int i = 0; i < PlayerEntities.Count; i++)
         {
             PlayerEntities[i].TurnEnded = false;
+        }
+        for (int i = 0; i < EnemyEntities.Count; i++)
+        {
+            EnemyEntities[i].TurnEnded = false;
         }
         battleState = BattleMain.Battlestate.waiting;
         enemyTurnManager.enabled = false;

@@ -38,12 +38,12 @@ public abstract class BattleEntity : MonoBehaviour {
             if(turnEnded)
             {
                 //On montre que l'entité est inactive
-                gameObject.renderer.material.color = new Color(trueColor.r * 0.3f,trueColor.g * 0.3f, trueColor.b * 0.3f);
+                gameObject.GetComponent<Renderer>().material.color = new Color(trueColor.r * 0.3f,trueColor.g * 0.3f, trueColor.b * 0.3f);
             }
             else
             {
                 //On montre que l'entité est à nouveau active
-                gameObject.renderer.material.color = trueColor;
+                gameObject.GetComponent<Renderer>().material.color = trueColor;
             }
         }
     }
@@ -52,7 +52,7 @@ public abstract class BattleEntity : MonoBehaviour {
 	public virtual void Start()
 	{
 		hp = hpMax;
-        trueColor = gameObject.renderer.material.color;
+        trueColor = gameObject.GetComponent<Renderer>().material.color;
 	}
 
 	public virtual void ChangeHP(int amount)
