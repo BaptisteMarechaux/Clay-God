@@ -11,8 +11,9 @@ public class BattleMain : MonoBehaviour {
 		selectingAtkTarget,
 		enemyTurn,
         hoverGod,
+        selectingGodAction,
         hoverSideKick,
-        placingUnit
+        selectingSideKickAction
 	};
 
 	public Battlestate battleState;

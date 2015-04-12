@@ -15,6 +15,15 @@ public class BattleGod : BattleEntity {
     [SerializeField]
     public List<BattleUnit> possibleUnits;
 
+    [SerializeField]
+    private int explosionRange;
+    public int ExplosionRange
+    {
+
+        get { return explosionRange; }
+
+        set { explosionRange = value; }
+    }
 
 	// Use this for initialization
 	public override void Start()
@@ -44,7 +53,7 @@ public class BattleGod : BattleEntity {
     public void Explode()
     {
         //Fonction qui va gérer l'explosion d'un Dieu , causant des effets aux alentours
-        hp = 0;
+        ChangeHP(-999);
     }
 
     public void Rest()

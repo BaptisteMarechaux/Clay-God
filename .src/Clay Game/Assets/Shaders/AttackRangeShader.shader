@@ -1,41 +1,104 @@
 ﻿Shader "Custom/AttackRangeShader" {
-	Properties {
-		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
+	Properties{
+		_Range ("Range", int) = 1
+		_GridThickness ("Grid Thickness", Float) = 0.01
+
+      _GridSpacingX ("Grid Spacing X", Float) = 1.0
+
+      _GridSpacingY ("Grid Spacing Y", Float) = 1.0
+
+      _GridOffsetX ("Grid Offset X", Float) = 0
+
+      _GridOffsetY ("Grid Offset Y", Float) = 0
 	}
+
 	SubShader {
-		Tags { "RenderType"="Opaque" }
-		LOD 200
-		
-		CGPROGRAM
-		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard fullforwardshadows
+		Tags {"RenderType" = "Transparent" "Queue" = "Transparent"} 
+			Blend SrcAlpha OneMinusSrcAlpha 
+			cull Off
+        Pass {
+        	
+            CGPROGRAM
 
-		// Use shader model 3.0 target, to get nicer looking lighting
-		#pragma target 3.0
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            
+            
+            int _Range;
+            uniform float _GridThickness;
+	        uniform float _GridSpacingX;
+	        uniform float _GridSpacingY;
+	        uniform float _GridOffsetX;
+	        uniform float _GridOffsetY;
+	        uniform float4 _GridColour;
+	        uniform float4 _BaseColour;
+       
+            struct vertexInput {
+                float4 vertex : POSITION;
+                float4 texcoord0 : TEXCOORD0;
+            };
 
-		sampler2D _MainTex;
+            struct fragmentInput{
+                float4 position : SV_POSITION;
+                float4 texcoord0 : TEXCOORD0;
+            };
+            
+            fragmentInput vert(vertexInput i){
+                fragmentInput o;
+                o.position = mul (UNITY_MATRIX_MVP, i.vertex);
+                o.texcoord0 = i.texcoord0;
+                return o;
+            }
 
-		struct Input {
-			float2 uv_MainTex;
-		};
-
-		half _Glossiness;
-		half _Metallic;
-		fixed4 _Color;
-
-		void surf (Input IN, inout SurfaceOutputStandard o) {
-			// Albedo comes from a texture tinted by color
-			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = c.rgb;
-			// Metallic and smoothness come from slider variables
-			o.Metallic = _Metallic;
-			o.Smoothness = _Glossiness;
-			o.Alpha = c.a;
-		}
-		ENDCG
-	} 
-	FallBack "Diffuse"
+            fixed4 frag(fragmentInput i) : SV_Target {
+                fixed4 color;
+                float center = 0.5;
+                float pSize = 0.01; //Panel size - Taille d'une case
+                int truc = abs(50 - (i.texcoord0.y+0.005)/pSize); //Variable qui va servir à régler un probleme de position de pixels
+                if(i.texcoord0.y < 0.5)
+                {
+                	truc += 1;
+                }
+                
+                if(i.texcoord0.x > (center - pSize *_Range - 0.005) && i.texcoord0.x < (center + pSize *_Range + 0.005))
+                {
+					if(i.texcoord0.y > (center - pSize *_Range- 0.005) && i.texcoord0.y < (center + pSize*_Range+ 0.005))
+					{
+						if(i.texcoord0.x > center + pSize*truc - 0.005 - _Range*pSize && i.texcoord0.x < center - pSize*truc + 0.005 + _Range*pSize || i.texcoord0.y > center-pSize+0.005 && i.texcoord0.y < center+pSize-0.005)
+						{
+							if (frac((i.texcoord0.x + _GridOffsetX)/_GridSpacingX) < (_GridThickness / _GridSpacingX) || frac((i.texcoord0.y + _GridOffsetY)/_GridSpacingY) < (_GridThickness / _GridSpacingY))
+							{
+				            	color = fixed4(0.65,0.22,0.22,1);
+					        }
+					        else
+					        {
+								color = fixed4(0.9,0.3,0.3,1);
+							}
+						}
+						else
+						{
+							discard;
+						}
+						
+					}
+					else
+					{
+						discard;
+					}
+                	
+                }
+                else
+                {
+                	discard;
+                }
+               
+                return color;
+            }
+            
+            
+            
+            ENDCG
+        }
+    }
 }
