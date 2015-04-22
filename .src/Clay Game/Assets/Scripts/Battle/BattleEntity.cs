@@ -29,6 +29,9 @@ public abstract class BattleEntity : MonoBehaviour {
 
     protected Color trueColor;
 
+    [SerializeField]
+    protected Renderer entityRenderer;
+
     protected bool turnEnded;
     public bool TurnEnded
     {
@@ -38,12 +41,12 @@ public abstract class BattleEntity : MonoBehaviour {
             if(turnEnded)
             {
                 //On montre que l'entité est inactive
-                gameObject.GetComponent<Renderer>().material.color = new Color(trueColor.r * 0.3f,trueColor.g * 0.3f, trueColor.b * 0.3f);
+                entityRenderer.material.color = new Color(trueColor.r * 0.3f,trueColor.g * 0.3f, trueColor.b * 0.3f);
             }
             else
             {
                 //On montre que l'entité est à nouveau active
-                gameObject.GetComponent<Renderer>().material.color = trueColor;
+               entityRenderer.material.color = trueColor;
             }
         }
     }
@@ -52,7 +55,7 @@ public abstract class BattleEntity : MonoBehaviour {
 	public virtual void Start()
 	{
 		hp = hpMax;
-        trueColor = gameObject.GetComponent<Renderer>().material.color;
+        trueColor = entityRenderer.material.color;
 	}
 
 	public virtual void ChangeHP(int amount)

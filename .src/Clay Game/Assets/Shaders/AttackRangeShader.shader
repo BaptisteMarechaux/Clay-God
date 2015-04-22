@@ -73,7 +73,7 @@
 					        }
 					        else
 					        {
-								color = fixed4(0.9,0.3,0.3,1);
+								color = fixed4(0.9,0.3,0.3,0.5);
 							}
 						}
 						else
