@@ -25,6 +25,12 @@ public class LevelSelectionCursor : MonoBehaviour {
     bool firstInput;
 
     public int usedIndex;
+
+    public int[] levels;
+
+    [SerializeField]
+    GameObject notAvailText;
+    
 	void Start () {
         levelDes.ChangeLevelInfos(0);
 	}
@@ -67,6 +73,24 @@ public class LevelSelectionCursor : MonoBehaviour {
             usedTarget = LevelTarget[usedIndex].position;
             levelDes.ChangeLevelInfos(usedIndex);
             if (!firstInput) firstInput = true;
+        }
+
+        if(input.Adown)
+        {
+            SelectLevel(usedIndex);
+        }
+    }
+
+    public void SelectLevel(int sel)
+    {
+        if(levels[sel] == 0)
+        {
+            notAvailText.SetActive(false);
+            notAvailText.SetActive(true);
+        }
+        else
+        {
+            Application.LoadLevel(levels[sel]);
         }
     }
 }

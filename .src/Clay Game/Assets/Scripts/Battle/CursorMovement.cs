@@ -74,7 +74,7 @@ public class CursorMovement : MonoBehaviour {
                     {
                         selectedTarget.ChangeHP(-hoverCharacter.Power);
                         hoverCharacter.TurnEnded = true;
-                        SetRange(0, 0, Vector3.zero);
+                        SetRange(0, 0, new Vector3(0, -0.1f, 0));
                         moveCount = new Vector2(0, 0);
                         battleMain.battleState = BattleMain.Battlestate.waiting;
                         battleMain.IsTurnEndedForAll();
@@ -270,7 +270,7 @@ public class CursorMovement : MonoBehaviour {
 
 			if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
 			{
-                SetRange(0, 0, Vector3.zero);
+                SetRange(0, 0, new Vector3(0, -0.1f, 0));
 				battleMain.battleState = BattleMain.Battlestate.waiting;
 			}
 		}
@@ -366,7 +366,7 @@ public class CursorMovement : MonoBehaviour {
     {
         originalPos = selectedCharTransform.position;
         selectedCharTransform.position = new Vector3(gameObject.transform.position.x, selectedCharTransform.position.y, gameObject.transform.position.z);
-        SetRange(0, 0, Vector3.zero);
+        SetRange(0, 0, new Vector3(0,-0.1f,0));
         //hoverCharacter.HidePanels();
         SetRange(0, hoverCharacter.Range, hoverCharacter.transform.position);
         //hoverCharacter.ShowRangeForAttacking();
@@ -395,7 +395,7 @@ public class CursorMovement : MonoBehaviour {
                 selectedCharTransform.position = originalPos;
                 gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
                 moveCount = new Vector2(0, 0);
-                SetRange(0, 0, Vector3.zero);
+                SetRange(0, 0, new Vector3(0, -0.1f, 0));
                 SetRange(hoverCharacter.Movement, hoverCharacter.Range, hoverCharacter.transform.position);
                 //hoverCharacter.ShowPanels();
                 ActionButtonsGroup.SetActive(false);
@@ -420,7 +420,7 @@ public class CursorMovement : MonoBehaviour {
     {
         //Fonction décrivant ce qu'il se passe quand une unité finit son tour sans rien faire
         hoverCharacter.TurnEnded = true;
-        SetRange(0, 0, Vector3.zero);
+        SetRange(0, 0, new Vector3(0, -0.1f, 0));
         //hoverCharacter.HidePanels();
         battleMain.battleState = BattleMain.Battlestate.waiting;
         ActionButtonsGroup.gameObject.SetActive(false);
