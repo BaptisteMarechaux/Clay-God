@@ -15,6 +15,9 @@ public class NetworkManager : MonoBehaviour {
 	[SerializeField]
 	Camera serverCamera;
 
+    [SerializeField]
+    CreateScrollList scrollList;
+
 	void Start()
 	{
         MasterServer.RequestHostList(typeName);
@@ -52,21 +55,26 @@ public class NetworkManager : MonoBehaviour {
 	
 	public void RefreshHostList()
 	{
-		MasterServer.ClearHostList();
+		//MasterServer.ClearHostList();
 		MasterServer.RequestHostList (typeName);
 		
 		if (MasterServer.PollHostList().Length != 0) {
 			HostData[] hostData = MasterServer.PollHostList();
-			int i = 0;
-				while (i < hostData.Length) {
-					Debug.Log("Game name: " + hostData[i].gameName);
-					i++;
-				}
-			MasterServer.ClearHostList();
+                for (int i = 0, l = hostData.Length; i < l; i++)
+                {
+                    Debug.Log("Game name: " + hostData[i].gameName);
+                    scrollList.serversList.Add(new ScrollListItem());
+                    scrollList.serversList[i].itemName = hostData[i].gameName;
+                    scrollList.serversList[i].playerCount = hostData[i].connectedPlayers.ToString();
+                    scrollList.serversList[i].hostData = hostData[i];
+         
+                }
+            scrollList.ListCreationBegin();
+                //MasterServer.ClearHostList();
 		}
 	}
 		
-		public void JoinServer(/*HostData gameToJoin*/)
+		public void JoinServer(HostData gameToJoin)
 		{
 			//GameToJoin = gameToJoin; //Les données qui correspondent à la partie qu'on veut rejoindre
             
@@ -76,14 +84,14 @@ public class NetworkManager : MonoBehaviour {
                     GameToJoin = hostData[i];
             }
             
-		    Application.LoadLevel("TacticalMovementTestScene"); //Le niveau à charger
+		    //Application.LoadLevel("TacticalMovementTestScene"); //Le niveau à charger
 		}
 		
 		
 		public void OnConnectedToServer() // Connexion du client
 		{
 			Debug.Log("Connected to server");
-			Application.LoadLevel("TacticalMovementTestScene");//Le niveau à charger
+			//Application.LoadLevel("TacticalMovementTestScene");//Le niveau à charger
 		}
 		
 		void OnServerInitialized() // Connexion du client
