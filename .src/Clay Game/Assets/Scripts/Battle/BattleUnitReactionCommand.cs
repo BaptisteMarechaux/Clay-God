@@ -6,16 +6,38 @@ public class BattleUnitReactionCommand : MonoBehaviour {
     BattleMain battleMain;
     [SerializeField]
     Collider detectionCollider;
-	// Use this for initialization
+
+    ConfrontationManager confrontationManager;
 
     BattleUnit detectedUnit;
+
+    InputManager inputManager;
+
+    bool TimeCountStarted;
+
+    float t = 0;
+    float maxT;
 	void Start () {
-	    
+        maxT = confrontationManager.reactionTime;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if(TimeCountStarted)
+        {
+            t += Time.deltaTime;
+            if (t >= maxT)
+            {
+                TimeCountStarted = false;
+                t = 0;
+            }
+                
+            if (inputManager.Adown)
+            {
+                confrontationManager.StartConfrontation();
+            }
+        }
+	    
 	}
 
     void OnTriggerEnter(Collider col)
@@ -25,7 +47,8 @@ public class BattleUnitReactionCommand : MonoBehaviour {
             detectedUnit = col.GetComponent<BattleUnit>();
             if(detectedUnit.IsEnemy)
             {
-
+                if(!TimeCountStarted)
+                    TimeCountStarted = true;
             }
         }
         

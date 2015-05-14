@@ -39,15 +39,15 @@ public class CursorMovement : MonoBehaviour {
     int ci = 0;
 
     [SerializeField]
-    Text importantText;
+    Text importantText; // Texte des informations sur l'unité survolée
 
     [SerializeField]
-    NetworkView ntView;
+    NetworkView ntView; //Network View
 
     [SerializeField]
-    private Renderer attackRangeObject;
+    private Renderer attackRangeObject; //Objet qui va servir a afficher la portée d'attaque
     [SerializeField]
-    private Renderer movementRangeObject;
+    private Renderer movementRangeObject; //Objet qui va servir à afficher la portée de mouvement
     
 	// Use this for initialization
 	void Start () {
