@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BattleUnit : BattleEntity {
+
 	/// Classe décrivant une unité, ses statistiques et certaines de ses actions
 	[SerializeField]
 	private int power; //Puissance de l'unité
@@ -77,10 +78,16 @@ public class BattleUnit : BattleEntity {
 
     IEnumerator FollowPath()
     {
+        
         Vector3 currentWaypoint = path[0];
 
         while(true)
         {
+            if (battleMain.battleState != BattleMain.Battlestate.enemyTurn)
+            {
+                transform.position = new Vector3(Mathf.Ceil(transform.position.x), transform.position.y, Mathf.Ceil(transform.position.z));
+                yield return null;
+            }
             if(transform.position.x==currentWaypoint.x && transform.position.z == currentWaypoint.z)
             {
                 targetIndex++;
@@ -92,6 +99,8 @@ public class BattleUnit : BattleEntity {
                 }
                 currentWaypoint = path[targetIndex];
             }
+
+           
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentWaypoint.x, transform.position.y, currentWaypoint.z), movementSpeed*Time.deltaTime);
             yield return null;
            

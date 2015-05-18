@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BattleGod : BattleEntity {
-    [SerializeField]
-    BattleMain battleMain;
 
     [SerializeField]
     public GameObject SpecialPowerEffect;
@@ -48,6 +46,16 @@ public class BattleGod : BattleEntity {
     public void InvokeUnit(BattleUnit UnitType)
     {
         //Fonction qui va servir à gérer l'invocation d'une unité
+        if (battleMain.PlayerEntities.Count < CountDisponibleUnits())
+        {
+            /*
+            RaycastHit hit;
+            float distanceToGround = 0;
+
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F))
+                distanceToGround = hit.distance;
+             */
+        }
     }
 
     public void Explode()
@@ -59,6 +67,8 @@ public class BattleGod : BattleEntity {
     public void Rest()
     {
         //Fonction qui va permettre le repos qui est permi une fois par tour pour le Dieu
+        ChangeHP(Mathf.FloorToInt(hpMax * 0.5f));
+        turnEnded = true;
     }
 
     public void Defeat()
@@ -73,5 +83,17 @@ public class BattleGod : BattleEntity {
             battleMain.Victory();
         }
         
+    }
+
+    int CountDisponibleUnits()
+    {
+        int a=0;
+        for(int i=0;i<battleMain.PlayerEntities.Count;i++)
+        {
+            if (battleMain.PlayerEntities[i].enabled)
+                a++;
+        }
+
+        return a;
     }
 }

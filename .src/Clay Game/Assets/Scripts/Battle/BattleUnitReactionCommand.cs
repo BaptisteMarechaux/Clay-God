@@ -7,10 +7,12 @@ public class BattleUnitReactionCommand : MonoBehaviour {
     [SerializeField]
     Collider detectionCollider;
 
+    [SerializeField]
     ConfrontationManager confrontationManager;
 
     BattleUnit detectedUnit;
 
+    [SerializeField]
     InputManager inputManager;
 
     bool TimeCountStarted;
@@ -23,18 +25,20 @@ public class BattleUnitReactionCommand : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //Debug.Log("Battle State " + battleMain.battleState);
         if(TimeCountStarted)
         {
             t += Time.deltaTime;
-            if (t >= maxT)
-            {
-                TimeCountStarted = false;
-                t = 0;
-            }
                 
             if (inputManager.Adown)
             {
                 confrontationManager.StartConfrontation();
+            }
+
+            if (t >= maxT)
+            {
+                TimeCountStarted = false;
+                t = 0;
             }
         }
 	    
@@ -42,6 +46,8 @@ public class BattleUnitReactionCommand : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
+        Debug.Log(col.gameObject.name);
+        Debug.Log(battleMain.battleState);
         if(battleMain.battleState == BattleMain.Battlestate.enemyTurn)
         {
             detectedUnit = col.GetComponent<BattleUnit>();

@@ -2,6 +2,9 @@
 using System.Collections;
 
 public abstract class BattleEntity : MonoBehaviour {
+    [SerializeField]
+    protected BattleMain battleMain;
+
 	[SerializeField]
 	protected int hp;
     public int HP

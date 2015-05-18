@@ -8,25 +8,6 @@ public class InputManager : MonoBehaviour {
 	[SerializeField]
 	private Transform curs2;
 
-	class sPlayerIntents
-	{
-		public bool wantUpDown;
-		public bool wantLeftDown;
-		public bool wantRightDown;
-		public bool wantDownDown;
-		public bool wantADown;
-		public bool wantBDown;
-		public bool wantXDown;
-		public bool wantYDown;
-	}
-
-	private Dictionary<NetworkPlayer, sPlayerIntents> playerIntents;
-	private Dictionary<NetworkPlayer, sPlayerIntents> PlayerIntents
-	{
-		get{return playerIntents;}
-		set{playerIntents = value;}
-	}
-
 	private NetworkView myNetworkView = null;
 
 	bool leftDown;
@@ -171,40 +152,14 @@ public class InputManager : MonoBehaviour {
 
 	void Start()
 	{
-		PlayerIntents = new Dictionary<NetworkPlayer, sPlayerIntents>();
-		myNetworkView = this.gameObject.GetComponent<NetworkView>();
+		
 	}
 
-	void OnPlayerConnected(NetworkPlayer p)
-	{
-		PlayerIntents.Add (p, new sPlayerIntents ());
-		myNetworkView.RPC ("NewPlayerConnected", RPCMode.OthersBuffered, p);
-	}
-
-	[RPC]
-	void NewPlayerConnected(NetworkPlayer p)
-	{
-		PlayerIntents.Add (p, new sPlayerIntents ());
-	}
-
+	
 	//Il faut penser a faire l'update en fonction de l'exemple de la derniere fois
 	void Update()
 	{
-		if(Network.isClient)
-		{
-			if(downDown)
-				myNetworkView.RPC("wantDownDown", RPCMode.Server, Network.player, false);
-			if(upDown)
-				myNetworkView.RPC("wantUpDown", RPCMode.Server, Network.player, false);
-			if(leftDown)
-				myNetworkView.RPC("wantLeftDown", RPCMode.Server, Network.player, false);
-			if(rightDown)
-				myNetworkView.RPC("wantRightDown", RPCMode.Server, Network.player, false);
-			if(aDown)
-				myNetworkView.RPC("wantADown", RPCMode.Server, Network.player, false);
-			if(bDown)
-				myNetworkView.RPC("wantBDown", RPCMode.Server, Network.player, false);
-		}
+		
 
 	}
 
@@ -213,23 +168,5 @@ public class InputManager : MonoBehaviour {
 		//Se servir de cette méthode pour les mouvements et autres inputs
 	}
 
-	[RPC]
-	void PlayerWantToMoveUp(NetworkPlayer p, bool b)
-	{
-		PlayerIntents [p].wantUpDown = b;
-		if (Network.isServer)
-		{
-			myNetworkView.RPC("wantUpDown", RPCMode.Others, p, b);
-		}
-	}
 	
-	[RPC]
-	void PlayerWantToMoveDown(NetworkPlayer p, bool b)
-	{
-		PlayerIntents[p].wantDownDown = b;
-		if (Network.isServer)
-		{
-			myNetworkView.RPC("PlayerWantToMoveDown", RPCMode.Others, p, b);
-		}
-	}
 }

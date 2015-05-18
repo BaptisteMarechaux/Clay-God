@@ -13,8 +13,10 @@ public class BattleMain : MonoBehaviour {
         hoverGod,
         selectingGodAction,
         hoverSideKick,
-        selectingSideKickAction
+        selectingSideKickAction,
+        confrontationActive
 	};
+ 
 
 	public Battlestate battleState;
 
@@ -118,7 +120,14 @@ public class BattleMain : MonoBehaviour {
         {
             //Verifie si chaque entité du joueur a deja joué son tour
             if (EnemyEntities[i].TurnEnded && EnemyEntities[i].gameObject.activeSelf)
+            {
                 over = true;
+            }
+            else
+            {
+                over = false;
+            }
+                
         }
 
         if (over)

@@ -133,8 +133,6 @@ public class PathFinding : MonoBehaviour {
        int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
        int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
 
-       print(dstX+dstY);
-
        return dstX + dstX;
 
    }

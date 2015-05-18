@@ -10,7 +10,7 @@ public class EnemyTurnManager : MonoBehaviour {
     BattleUnit selectedEnemy;
 
     List<Vector3> tempDestinations;
-    int a = 0;
+    int a = 0; //Simplement l'index de l'ennemi qui effectue des actions
     int enemyCount;
 
 	// Use this for initialization
@@ -81,12 +81,12 @@ public class EnemyTurnManager : MonoBehaviour {
                 }
         if(okAttack)
         {
-            selectedEnemy.target.GetComponent<BattleEntity>().ChangeHP(-selectedEnemy.Power);
+            //selectedEnemy.target.GetComponent<BattleEntity>().ChangeHP(-selectedEnemy.Power);
         }
         selectedEnemy.TurnEnded = true;
         battleMain.IsTurnEndedForEnemies();
         a++;
-        if(this.gameObject.activeSelf && battleMain.EnemyEntities.Count <= a)
+        if(this.gameObject.activeSelf && battleMain.EnemyEntities.Count > a)
            Move();
     }
 
