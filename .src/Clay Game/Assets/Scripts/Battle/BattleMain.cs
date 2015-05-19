@@ -26,6 +26,9 @@ public class BattleMain : MonoBehaviour {
     [SerializeField]
     CameraScript battleCamera;
 
+    [SerializeField]
+    CameraScript[] battleCameras;
+
     public List<CursorMovement> cursors;
 
     public List<BattleUnit> PlayerEntities;
@@ -54,19 +57,20 @@ public class BattleMain : MonoBehaviour {
         }
         else
         {
-            //Network.Connect(NetworkManager.GameToJoin);
+            Network.Connect(NetworkManager.GameToJoin);
         }
     }
 
     void OnConnectedToServer()
     {
-        int index = 0;
+        int index = 1;
         if(NetworkManager.GameToJoin != null)
         {
             index = NetworkManager.GameToJoin.connectedPlayers;
             Debug.Log(index);
         }
-        battleCamera.target = cursors[index].transform;
+        battleCamera = battleCameras[index];
+        //battleCamera.target = cursors[index].transform;
     }
 	void Start () {
         
