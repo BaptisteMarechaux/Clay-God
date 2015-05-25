@@ -1,0 +1,17 @@
+TODO List
+
+Les deux joueurs ayant vraiment leurs unités
+Empêcher les unités joueur de se déplacer plusieurs fois par tour
+
+Tutoriel Interactif
+
+Selection de niveau
+	Permettre a un joueur au hasard de choisir le niveau
+
+Boutique In Game
+	Proposer une liste d'objets
+	Permettre de sauvegarder ces objets localement
+Level editor/ Niveaux automatiques
+	Finir ce qui a été commencé sur blender (indisponible pour le moment)
+	
+Menu Options
