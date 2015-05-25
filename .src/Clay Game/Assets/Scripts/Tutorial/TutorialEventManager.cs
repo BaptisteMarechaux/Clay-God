@@ -14,9 +14,14 @@ public class TutorialEventManager : MonoBehaviour {
     [SerializeField]
     GameObject EnemyUnitShowObject;
 
+    [SerializeField]
+    GameObject cursorObject;
+    [SerializeField]
+    GameObject nextButtonObject;
+
 	// Use this for initialization
 	void Start () {
-	
+        cursorObject.SetActive(false);
 	}
 	
 	// Update is called once per frame

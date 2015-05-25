@@ -85,7 +85,7 @@ public class BattleUnit : BattleEntity {
         {
             if (battleMain.battleState != BattleMain.Battlestate.enemyTurn)
             {
-                transform.position = new Vector3(Mathf.Ceil(transform.position.x), transform.position.y, Mathf.Ceil(transform.position.z));
+                transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
                 yield return null;
             }
             if(transform.position.x==currentWaypoint.x && transform.position.z == currentWaypoint.z)

@@ -33,15 +33,7 @@ public class EnemyTurnManager : MonoBehaviour {
 
     void OnEnable()
     {
-        enemyCount = battleMain.EnemyEntities.Count;
-        for (int i = 0; i < enemyCount;i++ )
-        {
-            //battleMain.EnemyEntities[i].target.GetComponent<BattleEntity>().ChangeHP(-battleMain.EnemyEntities[i].Power);
-            //battleMain.EnemyEntities[i].TurnEnded = true;
-        }
-        //battleMain.EnemyTurnEnd();
-        //gameObject.SetActive(false);
-            
+        enemyCount = battleMain.EnemyEntities.Count;        
         Move();
     }
 
@@ -52,6 +44,12 @@ public class EnemyTurnManager : MonoBehaviour {
         {
              if(battleMain.EnemyEntities[a].TurnEnded == false)
              {
+                 if (!battleMain.EnemyEntities[a].isActiveAndEnabled)
+                 {
+                     a++;
+                     Move();
+                 }
+                     
                  selectedEnemy = battleMain.EnemyEntities[a];
                  //AttackCheck();
                  selectedEnemy.FindPath();
@@ -70,20 +68,22 @@ public class EnemyTurnManager : MonoBehaviour {
                 {
                     for (int j = (Mathf.Abs(i) - selectedEnemy.Range); j <= selectedEnemy.Range - Mathf.Abs(i); j += 1)
                     {
-                        //selectedEnemy.targetSelector.transform.position = new Vector3(i, 0, j);
-                       /* if(selectedEnemy.target.position.x == (i + transform.position.x) && selectedEnemy.target.position.z == (j+transform.position.z))
+                        if (selectedEnemy.target.position.x == (i + selectedEnemy.transform.position.x) && selectedEnemy.target.position.z == (j + selectedEnemy.transform.position.z))
                         {
+                            //Debug.Log("trouvé !");
                             okAttack = true;
-                        }*/
-                        okAttack = true;
+                        }
+                        
+                        //okAttack = true;
                     }
 
                 }
         if(okAttack)
         {
-            //selectedEnemy.target.GetComponent<BattleEntity>().ChangeHP(-selectedEnemy.Power);
+            selectedEnemy.target.GetComponent<BattleEntity>().ChangeHP(-selectedEnemy.Power);
+            okAttack = false;
         }
-        selectedEnemy.TurnEnded = true;
+        //selectedEnemy.TurnEnded = true;
         battleMain.IsTurnEndedForEnemies();
         a++;
         if(this.gameObject.activeSelf && battleMain.EnemyEntities.Count > a)

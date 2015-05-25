@@ -171,8 +171,7 @@ public class InputManager : MonoBehaviour {
 	//Il faut penser a faire l'update en fonction de l'exemple de la derniere fois
 	void Update()
 	{
-        if(LeftDown)
-            Debug.Log("On Appuie sur LEFT, Débile!");
+      
 	}
 
 	void FixedUpdate()

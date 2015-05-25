@@ -16,6 +16,8 @@ public class BattleMain : MonoBehaviour {
         selectingSideKickAction,
         confrontationActive
 	};
+
+    public AudioSource[] audioSources;
  
 
 	public Battlestate battleState;
@@ -46,6 +48,8 @@ public class BattleMain : MonoBehaviour {
     public EnemyTurnManager enemyTurnManager;
 
     public GameObject pTurn, eTurn, Vic, Defe;
+
+    public Grid grid;
 
 	// Use this for initialization
 
@@ -101,9 +105,10 @@ public class BattleMain : MonoBehaviour {
 
         if(over)
         {
-            Debug.Log("LE TOUR EST TERMINE");
             eTurn.SetActive(true);
-            
+
+            audioSources[0].gameObject.SetActive(false);
+            audioSources[1].gameObject.SetActive(true);
             battleState = BattleMain.Battlestate.enemyTurn;
            
             for (int i = 0; i < EnemyEntities.Count;i++ )
@@ -137,19 +142,23 @@ public class BattleMain : MonoBehaviour {
         if (over)
         {
             Debug.Log("LE TOUR ENNEMI EST TERMINE");
-           pTurn.SetActive(true);
-           for (int i = 0; i < PlayerEntities.Count; i++)
-           {
-               PlayerEntities[i].TurnEnded = false;
-           }
-           for (int i = 0; i < EnemyEntities.Count;i++ )
-           {
-               EnemyEntities[i].TurnEnded = false;
-           }
-               battleState = BattleMain.Battlestate.waiting;
+            pTurn.SetActive(true);
+            for (int i = 0; i < PlayerEntities.Count; i++)
+            {
+                PlayerEntities[i].TurnEnded = false;
+            }
+            for (int i = 0; i < EnemyEntities.Count;i++ )
+            {
+                EnemyEntities[i].TurnEnded = false;
+            }
+            battleState = BattleMain.Battlestate.waiting;
+            audioSources[0].gameObject.SetActive(true);
+            audioSources[1].gameObject.SetActive(false);
             enemyTurnManager.enabled = false;
 
         }
+
+        grid.Creategrid();
     }
 
     public void EnemyTurnEnd()

@@ -18,6 +18,9 @@ public class BattleUnitReactionCommand : MonoBehaviour {
     [SerializeField]
     GameObject buttonToPressObject;
 
+    [SerializeField]
+    GameObject visualReactionRangeSphere;
+
     bool TimeCountStarted;
 
     float t = 0;
