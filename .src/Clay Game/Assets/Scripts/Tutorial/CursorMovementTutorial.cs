@@ -3,21 +3,11 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class CursorMovementTutorial : MonoBehaviour {
-    public enum TutorialState
-    {
-        cursormoving,
-        selectingCharacter,
-        selectingAPositionForCharacter,
-        selectingAnAction,
-        selectingATarget,
-        selectingASecondCharacter,
-        selectingForWait,
-        enemyTurn,
-        enemyConfrontPause,
-        endOfTutorial
-    }
-
-    public TutorialState tutorialState;
+    [SerializeField]
+    TutorialEventManager tutorialEventManager;
+    [SerializeField]
+    TutorialTextManager textManager;
+    public int eventIndex = 9;
 
     //Script qui va gérer tout le mouvement du curseur
     [SerializeField]
@@ -80,14 +70,18 @@ public class CursorMovementTutorial : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if(tutorialEventManager.tutorialState != TutorialEventManager.TutorialState.firstExplains)
+        {
+            InputManagment();
+        }
         
-        InputManagment();
     }
 
     void InputManagment()
     {
         if (input.Adown)
         {
+
             switch (battleMain.battleState)
             {
                 case BattleMain.Battlestate.selectingAtkTarget:

@@ -41,4 +41,9 @@ public class MainMenuManager : MonoBehaviour {
         Application.Quit();
 
     }
+
+    public void LaunchTutorial()
+    {
+        Application.LoadLevel("TutorialScene");
+    }
 }

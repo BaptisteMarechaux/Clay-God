@@ -10,6 +10,9 @@ public class TutorialTextManager : MonoBehaviour {
     [SerializeField]
     TutorialEventManager eventManager;
 
+    [SerializeField]
+    InputManager inputManager;
+
 
     [SerializeField]
     List<string> textLines;
@@ -28,7 +31,10 @@ public class TutorialTextManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+        if(inputManager.Xdown)
+        {
+            ShowNextLine();
+        }
 	}
 
     public void ShowNextLine()

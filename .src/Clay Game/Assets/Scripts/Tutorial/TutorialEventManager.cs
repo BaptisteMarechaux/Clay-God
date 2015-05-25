@@ -3,6 +3,23 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class TutorialEventManager : MonoBehaviour {
+    public enum TutorialState //utilisé pour bloquer les scripts d'interaction
+    {
+        firstExplains,
+        cursormoving,
+        selectingCharacter,
+        selectingAPositionForCharacter,
+        selectingAnAction,
+        selectingATarget,
+        selectingASecondCharacter,
+        selectingForWait,
+        enemyTurn,
+        enemyConfrontPause,
+        endOfTutorial
+    }
+
+    public TutorialState tutorialState;
+
     //Classe qui va gérer les évènements du tutoriel
     [SerializeField]
     Image BlackImage;
@@ -15,13 +32,10 @@ public class TutorialEventManager : MonoBehaviour {
     GameObject EnemyUnitShowObject;
 
     [SerializeField]
-    GameObject cursorObject;
-    [SerializeField]
     GameObject nextButtonObject;
 
 	// Use this for initialization
 	void Start () {
-        cursorObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -53,8 +67,25 @@ public class TutorialEventManager : MonoBehaviour {
 
             case 10:
                 BlackImage.gameObject.SetActive(false);
+                //nextButtonObject.SetActive(false);
+                tutorialState = TutorialState.cursormoving;
+                break;
+
+            case 12:
+                tutorialState = TutorialState.selectingCharacter;
+                break;
+            case 15:
+                tutorialState = TutorialState.selectingAnAction;
+                break;
+            case 23:
+                ReturnToTitle();
                 break;
 
         }
+    }
+
+    public void ReturnToTitle()
+    {
+        Application.LoadLevel("SceneTitleScreen");
     }
 }
