@@ -50,7 +50,7 @@ public class BattleUnit : BattleEntity {
     public TargetDetection targetSelector;
     [SerializeField]
     private float movementSpeed=2;
-    private Vector3[] path;
+    public Vector3[] path;
     int targetIndex;
 	
 	// Use this for initialization
@@ -60,9 +60,32 @@ public class BattleUnit : BattleEntity {
 
     public void FindPath()
     {
+        bool continuer = false;
         if (isEnemy)
         {
-            PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+            for (int i = -1; i <= 1; i += 1)
+            {
+                for (int j = (Mathf.Abs(i) - 1); j <= 1 - Mathf.Abs(i); j += 1)
+                {
+                    if (target.position.x == (i + transform.position.x) && target.position.z == (j + transform.position.z))
+                    {
+                        continuer = true;
+                        
+                    }
+
+                    //okAttack = true;
+                }
+
+            }
+            if(continuer)
+            {
+                TurnEnded = true;
+            }
+            else
+            {
+                 PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+            }
+           
         }
     }
 
@@ -94,6 +117,7 @@ public class BattleUnit : BattleEntity {
                 if(targetIndex >= path.Length)
                 {
                     TurnEnded = true;
+                    
                     yield break;
                     
                 }

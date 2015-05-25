@@ -157,8 +157,6 @@ public class BattleMain : MonoBehaviour {
             enemyTurnManager.enabled = false;
 
         }
-
-        grid.Creategrid();
     }
 
     public void EnemyTurnEnd()

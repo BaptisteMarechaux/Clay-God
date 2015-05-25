@@ -33,7 +33,8 @@ public class EnemyTurnManager : MonoBehaviour {
 
     void OnEnable()
     {
-        enemyCount = battleMain.EnemyEntities.Count;        
+        enemyCount = battleMain.EnemyEntities.Count;
+        a = 0;
         Move();
     }
 
