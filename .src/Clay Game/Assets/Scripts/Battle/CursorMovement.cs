@@ -39,15 +39,21 @@ public class CursorMovement : MonoBehaviour {
     int ci = 0;
 
     [SerializeField]
-    Text importantText; // Texte des informations sur l'unité survolée
-
+    Text hoverEntityNameText; // Texte des informations sur l'unité survolée
     [SerializeField]
-    NetworkView ntView; //Network View
+    Text hoverEntityHPText;
+    [SerializeField]
+    Text hoverEntityPowerText;
+    [SerializeField]
+    Text hoverEntityResistText;
+    [SerializeField]
+    Image hoverEntityHPImage;
 
     [SerializeField]
     private Renderer attackRangeObject; //Objet qui va servir a afficher la portée d'attaque
     [SerializeField]
     private Renderer movementRangeObject; //Objet qui va servir à afficher la portée de mouvement
+
     
 	// Use this for initialization
 	void Start () {
@@ -56,8 +62,9 @@ public class CursorMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        
         //if(ntView.isMine)
-        //{
+       // {
             InputManagment();
         //}
 	}
@@ -74,7 +81,7 @@ public class CursorMovement : MonoBehaviour {
                     {
                         selectedTarget.ChangeHP(-hoverCharacter.Power);
                         hoverCharacter.TurnEnded = true;
-                        SetRange(0, 0, new Vector3(0, -0.1f, 0));
+                        SetRange(0, 0, new Vector3(0, -1f, 0));
                         moveCount = new Vector2(0, 0);
                         battleMain.battleState = BattleMain.Battlestate.waiting;
                         battleMain.IsTurnEndedForAll();
@@ -173,6 +180,7 @@ public class CursorMovement : MonoBehaviour {
                 }
 
             }
+
         }
        
     }
@@ -191,6 +199,20 @@ public class CursorMovement : MonoBehaviour {
 
 	bool isMovable() //Vérifie si on peut encore faire avancer le curseur
 	{
+        switch(battleMain.battleState)
+        {
+            case BattleMain.Battlestate.selectingCharacter:
+                if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Movement)
+                    return false;
+                break;
+
+            case BattleMain.Battlestate.selectingAtkTarget:
+                if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Range)
+                    return false;
+                break;
+
+        }
+        /*
         if(battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
         {
             if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Movement)
@@ -200,17 +222,10 @@ public class CursorMovement : MonoBehaviour {
         {
             if ((Mathf.Abs(moveCount.x + adVal.x) + Mathf.Abs(moveCount.y + adVal.y)) > hoverCharacter.Range)
                 return false;
-        }
+        }*/
 		
 		return true;
 	}
-
-    bool isMovableForSelectAttack()
-    {
-        //Fonction qui va servir a vérifier si on peut déplacer le curseur quand on séléctionne une cible
-        
-        return true;
-    }
 
 	bool CharacterSelection()
 	{
@@ -223,12 +238,13 @@ public class CursorMovement : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col)
 	{
+		Debug.Log("Le Collider : " + col.tag);
 		if(col.tag == "Character")
 		{
             if (battleMain.battleState == BattleMain.Battlestate.waiting)
             {
-                   
                 hoverCharacter = col.GetComponent<BattleUnit>();
+                hoverCollider = col;
                 selectedCharTransform = col.transform;
                 if (!hoverCharacter.TurnEnded)
                 {
@@ -252,7 +268,7 @@ public class CursorMovement : MonoBehaviour {
         if (battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
         {
             selectedCollider = col;
-            selectedTarget = col.GetComponent<BattleUnit>();
+            selectedTarget = col.gameObject.GetComponent<BattleUnit>();
         }
 	}
 
@@ -261,7 +277,7 @@ public class CursorMovement : MonoBehaviour {
 		if(col.tag == "Character"){
             if (battleMain.battleState == BattleMain.Battlestate.selectingCharacter)
             {
-                if (col != hoverCharacter.GetComponent<Collider>())
+                if (col != hoverCollider)
                     isImpossiblePosition = true;
             }
 
@@ -270,7 +286,7 @@ public class CursorMovement : MonoBehaviour {
 
 			if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
 			{
-                SetRange(0, 0, new Vector3(0, -0.1f, 0));
+                SetRange(0, 0, new Vector3(0, -1f, 0));
 				battleMain.battleState = BattleMain.Battlestate.waiting;
 			}
 		}
@@ -358,7 +374,8 @@ public class CursorMovement : MonoBehaviour {
 	{
 		if(battleMain.battleState == BattleMain.Battlestate.hoverCharacter)
 		{
-            SetRange(hoverCharacter.Movement, hoverCharacter.Range, hoverCharacter.transform.position);
+            if(!hoverCharacter.IsEnemy)
+                SetRange(hoverCharacter.Movement, hoverCharacter.Range, new Vector3(hoverCharacter.transform.position.x, 0.01f, hoverCharacter.transform.position.z));
 		}
 	}
 
@@ -366,7 +383,7 @@ public class CursorMovement : MonoBehaviour {
     {
         originalPos = selectedCharTransform.position;
         selectedCharTransform.position = new Vector3(gameObject.transform.position.x, selectedCharTransform.position.y, gameObject.transform.position.z);
-        SetRange(0, 0, new Vector3(0,-0.1f,0));
+        SetRange(0, 0, new Vector3(0,-1f,0));
         //hoverCharacter.HidePanels();
         SetRange(0, hoverCharacter.Range, hoverCharacter.transform.position);
         //hoverCharacter.ShowRangeForAttacking();
@@ -395,7 +412,7 @@ public class CursorMovement : MonoBehaviour {
                 selectedCharTransform.position = originalPos;
                 gameObject.transform.position = new Vector3(selectedCharTransform.position.x, gameObject.transform.position.y, selectedCharTransform.position.z);
                 moveCount = new Vector2(0, 0);
-                SetRange(0, 0, new Vector3(0, -0.1f, 0));
+                SetRange(0, 0, new Vector3(0, -1f, 0));
                 SetRange(hoverCharacter.Movement, hoverCharacter.Range, hoverCharacter.transform.position);
                 //hoverCharacter.ShowPanels();
                 ActionButtonsGroup.SetActive(false);
@@ -420,7 +437,7 @@ public class CursorMovement : MonoBehaviour {
     {
         //Fonction décrivant ce qu'il se passe quand une unité finit son tour sans rien faire
         hoverCharacter.TurnEnded = true;
-        SetRange(0, 0, new Vector3(0, -0.1f, 0));
+        SetRange(0, 0, new Vector3(0, -1f, 0));
         //hoverCharacter.HidePanels();
         battleMain.battleState = BattleMain.Battlestate.waiting;
         ActionButtonsGroup.gameObject.SetActive(false);
@@ -487,7 +504,14 @@ public class CursorMovement : MonoBehaviour {
         if(battleMain.battleState == BattleMain.Battlestate.selectingAtkTarget)
         {
             if (selectedTarget != null)
-                importantText.text = selectedTarget.Nickname + " " + selectedTarget.HP + "/" + selectedTarget.HPMax;
+            {
+                hoverEntityNameText.text = selectedTarget.Nickname;
+                hoverEntityHPText.text =  selectedTarget.HP + "/" + selectedTarget.HPMax;
+                hoverEntityPowerText.text = "";
+                hoverEntityResistText.text = "";
+                hoverEntityHPImage.fillAmount = selectedTarget.HP*1.0f/selectedTarget.HPMax;
+            }
+                
         }
         else
         {
@@ -495,7 +519,11 @@ public class CursorMovement : MonoBehaviour {
             {
                 if (hoverCharacter != null)
                 {
-                    importantText.text = hoverCharacter.Nickname + " " + hoverCharacter.HP + "/" + hoverCharacter.HPMax;
+                    hoverEntityNameText.text = hoverCharacter.Nickname;
+                    hoverEntityHPText.text = hoverCharacter.HP + "/" + hoverCharacter.HPMax;
+                    hoverEntityPowerText.text = hoverCharacter.Power.ToString();
+                    hoverEntityResistText.text = hoverCharacter.Range.ToString();
+                    hoverEntityHPImage.fillAmount = hoverCharacter.HP*1.0f / hoverCharacter.HPMax;
                 }
             }
 
@@ -503,7 +531,11 @@ public class CursorMovement : MonoBehaviour {
             {
                 if (hoverGod != null)
                 {
-                    importantText.text = hoverGod.Nickname + " " + hoverGod.HP + "/" + hoverGod.HPMax;
+                    hoverEntityNameText.text = hoverGod.Nickname;
+                    hoverEntityHPText.text = hoverGod.HP + "/" + hoverGod.HPMax;
+                    hoverEntityPowerText.text = "";
+                    hoverEntityResistText.text = "";
+                    hoverEntityHPImage.fillAmount = hoverGod.HP * 1.0f / hoverGod.HPMax;
                 }
             }
           
@@ -522,8 +554,8 @@ public class CursorMovement : MonoBehaviour {
         attackRangeObject.material.SetInt("_Range", mvt + atk);
         movementRangeObject.material.SetInt("_Range", mvt);
 
-        attackRangeObject.gameObject.transform.position = new Vector3(pos.x, attackRangeObject.transform.position.y, pos.z);
-        movementRangeObject.gameObject.transform.position = new Vector3(pos.x, movementRangeObject.transform.position.y, pos.z);
+        attackRangeObject.gameObject.transform.position = new Vector3(pos.x, pos.y - 0.001f, pos.z);
+        movementRangeObject.gameObject.transform.position = pos;
 
     }
 }

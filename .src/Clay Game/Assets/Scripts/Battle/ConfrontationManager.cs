@@ -11,9 +11,8 @@ public class ConfrontationManager : MonoBehaviour {
 
     public float reactionTime; //Temps qu'il faut pour avoir le temps de déclencher la confrontation
 
-    [SerializeField]
-    float confrontationTime;
-    float timeLeft;
+    public float confrontationTime;
+    public float timeLeft;
 
     float enemyGaugeLevel;
     float playerGaugeLevel;
@@ -27,6 +26,8 @@ public class ConfrontationManager : MonoBehaviour {
 
     [SerializeField]
     InputManager inputManager;
+
+    BattleUnit confrontationEnemy;
 
  
 
@@ -70,7 +71,6 @@ public class ConfrontationManager : MonoBehaviour {
         {
             if (timeLeft < confrontationTime)
             {
-
                 ExectuteConfrontationCommand();
                 timeLeft += Time.deltaTime;
             }
@@ -83,8 +83,9 @@ public class ConfrontationManager : MonoBehaviour {
         
 	}
 
-    public void StartConfrontation()
+    public void StartConfrontation(BattleUnit enemy)
     {
+        confrontationEnemy = enemy;
         battleMain.battleState = BattleMain.Battlestate.confrontationActive;
         timeLeft = 0;
         ConfrontationImageGroup.SetActive(true);
@@ -94,6 +95,12 @@ public class ConfrontationManager : MonoBehaviour {
     
     public void EndConfrontation()
     {
+        if(playerGaugeLevel > enemyGaugeLevel)
+        {
+            //Victoire ! L'ennemi ne doit pas bouger
+            confrontationEnemy.StopAllCoroutines();
+            confrontationEnemy.TurnEnded = true;
+        }
         ConfrontationImageGroup.SetActive(false);
         battleMain.battleState = BattleMain.Battlestate.enemyTurn;
     }

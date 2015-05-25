@@ -26,7 +26,7 @@ public class BattleVictory : MonoBehaviour {
         else
         {
             t = 0;
-            Application.LoadLevel(0);
+            Application.LoadLevel("SceneTitleScreen");
         }
 	}
 }

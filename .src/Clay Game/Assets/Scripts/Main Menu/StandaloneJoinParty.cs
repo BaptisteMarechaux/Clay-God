@@ -6,6 +6,6 @@ public class StandaloneJoinParty : MonoBehaviour {
 	public void JoinServer()
     {
         NetworkManager.GameToJoin = hostData;
-        Application.LoadLevel(2);
+        Application.LoadLevel("TacticalMovementTestScene");
     }
 }

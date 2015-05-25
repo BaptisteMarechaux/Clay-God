@@ -3,38 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour {
-	[SerializeField]
-	private Transform curs1;
-	[SerializeField]
-	private Transform curs2;
-
-    [SerializeField]
-    private NetworkView myNetworkView;
 
 	bool leftDown;
 	public bool LeftDown
 	{
 		get{
-            if(myNetworkView.isMine)
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Q))
+                return true;
+            if (leftDown)
             {
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Q))
-                    return true;
-                if (leftDown)
-                {
-                    leftDown = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                leftDown = false;
+                return true;
             }
             else
             {
                 return false;
             }
-			
-		}
+            }
 		set{leftDown = value;}
 	}
 
@@ -42,24 +27,19 @@ public class InputManager : MonoBehaviour {
 	public bool RightDown
 	{
 		get{
-            if (myNetworkView.isMine)
+            
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+                return true;
+            if (rightDown)
             {
-                if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-                    return true;
-                if (rightDown)
-                {
-                    rightDown = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                rightDown = false;
+                return true;
             }
             else
             {
                 return false;
             }
+          
             
 		}
 		set{rightDown = value;}
@@ -69,24 +49,19 @@ public class InputManager : MonoBehaviour {
 	public bool DownDown
 	{
 		get{
-            if (myNetworkView.isMine)
+            
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+                return true;
+            if (downDown)
             {
-                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-                    return true;
-                if (downDown)
-                {
-                    downDown = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                downDown = false;
+                return true;
             }
             else
             {
                 return false;
             }
+           
            
 		}
 		set{downDown = value;}
@@ -96,24 +71,19 @@ public class InputManager : MonoBehaviour {
 	public bool UpDown
 	{
 		get{
-            if(myNetworkView.isMine)
+           
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z))
+                return true;
+            if (upDown)
             {
-                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z))
-                    return true;
-                if (upDown)
-                {
-                    upDown = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                upDown = false;
+                return true;
             }
             else
             {
                 return false;
             }
+           
            
 		}
 		set{upDown = value;}
@@ -123,24 +93,19 @@ public class InputManager : MonoBehaviour {
 	public bool Adown
 	{
 		get{
-            if(myNetworkView.isMine)
+           
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+                return true;
+            if (aDown)
             {
-                if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
-                    return true;
-                if (aDown)
-                {
-                    aDown = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                aDown = false;
+                return true;
             }
             else
             {
                 return false;
             }
+           
             
 		}
 		set{aDown = value;}
@@ -150,24 +115,19 @@ public class InputManager : MonoBehaviour {
 	public bool Bdown
 	{
 		get{
-            if(myNetworkView.isMine)
+            
+            if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.Backspace))
+                return true;
+            if (bDown)
             {
-                if (Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.Backspace))
-                    return true;
-                if (bDown)
-                {
-                    bDown = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                bDown = false;
+                return true;
             }
             else
             {
                 return false;
             }
+           
             
 		}
 		set{bDown = value;}
@@ -177,24 +137,19 @@ public class InputManager : MonoBehaviour {
 	public bool Xdown
 	{
 		get{
-            if(myNetworkView.isMine)
+           
+            if (Input.GetKeyDown(KeyCode.V))
+                return true;
+            if (xDown)
             {
-                if (Input.GetKeyDown(KeyCode.V))
-                    return true;
-                if (xDown)
-                {
-                    xDown = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                xDown = false;
+                return true;
             }
             else
             {
                 return false;
             }
+           
 			
 		}
 		set{xDown = value;}
@@ -216,8 +171,8 @@ public class InputManager : MonoBehaviour {
 	//Il faut penser a faire l'update en fonction de l'exemple de la derniere fois
 	void Update()
 	{
-		
-
+        if(LeftDown)
+            Debug.Log("On Appuie sur LEFT, Débile!");
 	}
 
 	void FixedUpdate()

@@ -15,6 +15,9 @@ public class BattleUnitReactionCommand : MonoBehaviour {
     [SerializeField]
     InputManager inputManager;
 
+    [SerializeField]
+    GameObject buttonToPressObject;
+
     bool TimeCountStarted;
 
     float t = 0;
@@ -32,13 +35,17 @@ public class BattleUnitReactionCommand : MonoBehaviour {
                 
             if (inputManager.Adown)
             {
-                confrontationManager.StartConfrontation();
+                confrontationManager.StartConfrontation(detectedUnit);
+                buttonToPressObject.SetActive(false);
+                TimeCountStarted = false;
+                t = 0;
             }
 
             if (t >= maxT)
             {
                 TimeCountStarted = false;
                 t = 0;
+                buttonToPressObject.SetActive(false);
             }
         }
 	    
@@ -54,7 +61,12 @@ public class BattleUnitReactionCommand : MonoBehaviour {
             if(detectedUnit.IsEnemy)
             {
                 if(!TimeCountStarted)
+                {
+                    buttonToPressObject.SetActive(true);
                     TimeCountStarted = true;
+                }
+
+                    
             }
         }
         

@@ -53,7 +53,7 @@ public class BattleMain : MonoBehaviour {
     {
         if (Network.isServer)
         {
-
+            
         }
         else
         {
@@ -69,7 +69,7 @@ public class BattleMain : MonoBehaviour {
             index = NetworkManager.GameToJoin.connectedPlayers;
             Debug.Log(index);
         }
-        battleCamera = battleCameras[index];
+        //battleCamera = battleCameras[0];
         //battleCamera.target = cursors[index].transform;
     }
 	void Start () {

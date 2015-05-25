@@ -39,8 +39,8 @@
                 //Multiplication par les mtarices qui aligne le shader à l'ecran
                 o.pos = mul (UNITY_MATRIX_MVP, v.vertex);  
                                      
-                //o.color = v.normal * 0.5 + 0.5;
-                //o.color = float4(height, height, 0.8, 1);
+                o.color = v.normal * 0.5 + 0.5;
+                o.color = float4(height, height, 0.8, 1);
                 return o;
             }
 
