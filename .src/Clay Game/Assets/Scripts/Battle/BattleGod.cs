@@ -67,6 +67,7 @@ public class BattleGod : BattleEntity {
     public void Rest()
     {
         //Fonction qui va permettre le repos qui est permi une fois par tour pour le Dieu
+        //Rend actuellement 50% des hpMax
         ChangeHP(Mathf.FloorToInt(hpMax * 0.5f));
         turnEnded = true;
     }

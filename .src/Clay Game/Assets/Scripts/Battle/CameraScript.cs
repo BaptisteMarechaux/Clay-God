@@ -7,6 +7,8 @@ public class CameraScript : MonoBehaviour {
 	private float speed = 10;
     [SerializeField]
     BattleMain battleMain;
+    [SerializeField]
+    float targetOffset=3;
 
 	// Use this for initialization
 	void Start () {
@@ -28,9 +30,9 @@ public class CameraScript : MonoBehaviour {
 	{
         if (battleMain.battleState == BattleMain.Battlestate.enemyTurn)
         {
-            return new Vector3(target.position.x, transform.position.y, target.position.z - 3);
+            return new Vector3(target.position.x, transform.position.y, target.position.z - targetOffset);
         }
-		return new Vector3(target.position.x, transform.position.y, target.position.z-3);
+		return new Vector3(target.position.x, transform.position.y, target.position.z-targetOffset);
 
 	}
 }
