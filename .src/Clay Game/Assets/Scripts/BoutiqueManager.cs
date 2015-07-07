@@ -107,7 +107,7 @@ public class BoutiqueManager : MonoBehaviour {
         }
         else
         {
-            buyItemDescription.text = "Vous n'avez pas assez d'argent";
+            buyItemDescription.text = "Not enough money";
         }
     }
 
