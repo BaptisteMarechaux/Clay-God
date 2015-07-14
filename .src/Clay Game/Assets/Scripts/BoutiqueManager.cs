@@ -67,9 +67,10 @@ public class BoutiqueManager : MonoBehaviour {
             ItemNames[i].text = itemList[i].ItemName;
             ItemCosts[i].text = itemList[i].ItemCost.ToString()+"£";
             ItemCountText[i].text = "x" + playerItemCount[i].ToString();
-
+            /*
             if (i >= ItemNames.Length)
                 break;
+             */
         }
 	}
 	

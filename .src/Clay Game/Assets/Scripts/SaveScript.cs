@@ -27,7 +27,7 @@ public class SaveScript : MonoBehaviour {
 
     void Start()
     {
-        
+
     }
 	
 	// Update is called once per frame
@@ -104,9 +104,15 @@ public class SaveScript : MonoBehaviour {
     void initializeItemInfos()
     {
         shopItems = new ShopItem[]{
-            new ShopItem(0, "Potion", 20, "Restore 30% of HP"),
-            new ShopItem(0, "HyperPotion", 20, "Restore all HP"),
-            new ShopItem(0, "UpPower", 20, "Give two more poitns of Power")
+            new ShopItem(0, "Potion", 20, "Restores 30% of HP"),
+            new ShopItem(0, "HyperPotion", 60, "Restores all HP"),
+            new ShopItem(0, "Poison", 40, "Takes 50% of HP"),
+            new ShopItem(0, "UpPower", 50, "Raise Power by 2"),
+            new ShopItem(0, "UpResistance", 50, "Raise Resistance by 2"),
+            new ShopItem(0, "UpMovement", 50, "Raise Movement by 2"),
+            new ShopItem(0, "DownPower", 20, "Reduce Power of an enemy by 2"),
+            new ShopItem(0, "DownResistance", 20, "Reduce Resistance of an enemy by 2"),
+            new ShopItem(0, "ImmunePotion", 100, "Ignore one attack")
         };
     }
 }

@@ -73,8 +73,7 @@ public class BattleMain : MonoBehaviour {
             index = NetworkManager.GameToJoin.connectedPlayers;
             Debug.Log(index);
         }
-        //battleCamera = battleCameras[0];
-        //battleCamera.target = cursors[index].transform;
+
     }
 	void Start () {
         
@@ -88,7 +87,6 @@ public class BattleMain : MonoBehaviour {
         
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		Debug.Log(battleState);
 	}
@@ -183,5 +181,28 @@ public class BattleMain : MonoBehaviour {
     public void Defeat()
     {
         Defe.SetActive(true);
+    }
+
+    public void ForceTurnEnd()
+    {
+        eTurn.SetActive(true);
+
+        audioSources[0].gameObject.SetActive(false);
+        audioSources[1].gameObject.SetActive(true);
+        battleState = BattleMain.Battlestate.enemyTurn;
+
+        for (int i = 0; i < EnemyEntities.Count; i++)
+        {
+            //EnemyEntities[i].target = PlayerEntities[Random.Range(0, PlayerEntities.Count - 1)].transform;
+            EnemyEntities[i].target = PlayerGodEntities[0].transform;
+        }
+
+        enemyTurnManager.enabled = true;
+    }
+
+    public void GoBackToTitle()
+    {
+        Network.Disconnect();
+        Application.LoadLevel(0);
     }
 }
