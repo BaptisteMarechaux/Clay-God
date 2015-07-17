@@ -26,6 +26,9 @@ public class BattleVictory : MonoBehaviour {
         else
         {
             t = 0;
+            Network.Disconnect();
+            if (Network.isServer)
+                MasterServer.UnregisterHost();
             Application.LoadLevel("SceneTitleScreen");
         }
 	}

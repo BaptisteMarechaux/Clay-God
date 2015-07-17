@@ -8,13 +8,21 @@ public class BattleUnit : BattleEntity {
 	[SerializeField]
 	private int power; //Puissance de l'unité
 	public int Power{
+        set { power = value; }
 		get{return power;}
 	}
 	[SerializeField]
 	private int resist; //Résistance de l'unité
+    public int Resist
+    {
+        set { resist = value; }
+        get { return resist; }
+    }
+
 	[SerializeField]
 	private int movement;
 	public int Movement{
+        set { movement = value; }
 		get{return movement;}
 	}
 
@@ -52,6 +60,15 @@ public class BattleUnit : BattleEntity {
     private float movementSpeed=2;
     public Vector3[] path;
     int targetIndex;
+
+    //Index of the player having the unit , ignored if enemy
+    [SerializeField]
+    int playerN;
+    public int PlayerN
+    {
+        get { return playerN; }
+        set { playerN = value; }
+    }
 	
 	// Use this for initialization
 	public override void Start () {

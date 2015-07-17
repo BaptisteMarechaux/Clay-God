@@ -42,7 +42,8 @@ public class CreateScrollList : MonoBehaviour {
             GameObject newButton = Instantiate(sampleButton) as GameObject;
             SampleButton sButton = newButton.GetComponent<SampleButton>();
             sButton.nameText.text = item.itemName;
-            sButton.playerCountText.text = item.playerCount;
+            sButton.playerCountText.text = "Number of Players"  + item.playerCount;
+           
             newButton.GetComponent<StandaloneJoinParty>().hostData = item.hostData;
             //sButton.button.onClick = item.itemAction;
             newButton.transform.SetParent(controlPanel);

@@ -17,7 +17,15 @@ public class CameraScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        var d = Input.GetAxis("Mouse ScrollWheel");
+        if (d > 0f)
+        {
+            transform.Translate(Vector3.down * Time.deltaTime * 30, Space.Self);
+        }
+        else if (d < 0f)
+        {
+            transform.Translate(Vector3.up * Time.deltaTime * 30, Space.Self);
+        }
 	}
 
 	void FixedUpdate()
@@ -32,7 +40,7 @@ public class CameraScript : MonoBehaviour {
         {
             return new Vector3(target.position.x, transform.position.y, target.position.z - targetOffset);
         }
-		return new Vector3(target.position.x, transform.position.y, target.position.z-targetOffset);
+		return new Vector3(target.position.x, transform.position.y, target.position.z -targetOffset);
 
 	}
 }

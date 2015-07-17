@@ -19,6 +19,7 @@ public class ConfrontationManager : MonoBehaviour {
 
     [SerializeField]
     Image playerGaugeImage;
+
     [SerializeField]
     Image enemyGaugeImage;
 
@@ -29,7 +30,8 @@ public class ConfrontationManager : MonoBehaviour {
 
     BattleUnit confrontationEnemy;
 
- 
+    [SerializeField]
+    int unitIndex;
 
     public enum ConfrontationType
     {
@@ -100,6 +102,17 @@ public class ConfrontationManager : MonoBehaviour {
             //Victoire ! L'ennemi ne doit pas bouger
             confrontationEnemy.StopAllCoroutines();
             confrontationEnemy.TurnEnded = true;
+            if(inputManager.currentPlayer == 1)
+            {
+                confrontationEnemy.ChangeHP((battleMain.PlayerEntities[unitIndex].Power - confrontationEnemy.Resist)*-1);
+                battleMain.PlayerEntities[unitIndex].ChangeHP((confrontationEnemy.Power - battleMain.PlayerEntities[unitIndex].Resist)*-1);
+            }
+            else
+            {
+                confrontationEnemy.ChangeHP((battleMain.Player2Entities[unitIndex].Power - confrontationEnemy.Resist)*-1);
+                battleMain.Player2Entities[unitIndex].ChangeHP((confrontationEnemy.Power - battleMain.Player2Entities[unitIndex].Resist)*-1);
+            }
+
         }
         ConfrontationImageGroup.SetActive(false);
         battleMain.battleState = BattleMain.Battlestate.enemyTurn;
@@ -107,18 +120,18 @@ public class ConfrontationManager : MonoBehaviour {
 
     void ExectuteConfrontationCommand()
     {
-        enemyGaugeLevel += Time.deltaTime * 0.1f;
+        enemyGaugeLevel += Time.deltaTime * 0.3f;
         if (inputManager.Adown)
         {
             playerGaugeLevel += 0.05f;
         }
+
         /*
         if (playerGaugeLevel > 1) playerGaugeLevel = 1;
         if (playerGaugeLevel < 0) playerGaugeLevel = 0;
         if(enemyGaugeLevel > 1) enemyGaugeLevel = 1;
         if (enemyGaugeLevel < 0) enemyGaugeLevel = 0;
         */
-
 
         playerGaugeImage.fillAmount = playerGaugeLevel/(playerGaugeLevel+enemyGaugeLevel);
         enemyGaugeImage.fillAmount = enemyGaugeLevel / (playerGaugeLevel + enemyGaugeLevel);

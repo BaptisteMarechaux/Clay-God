@@ -15,6 +15,7 @@ Z, Q, S, D, HAUT, BAS, GAUCHE, DROITE , (W, A, S, D pour d'autres types de clavi
 Molette souris : Zoom en combat
 
 INFORMATIONS POUR L'ÉCRAN TITRE
+
 	Il faut choisir "Two Players" si on veut commencer à jouer
 	Et choisir "Tutorial" pour suivre le tutoriel
 	
@@ -23,6 +24,7 @@ INFORMATIONS POUR L'ÉCRAN TITRE
 	On est censé pour donner un nom à la partie , mais on ne peut en créer qu'une pour l'instant qui se nomme ClayGod, automatiquement
 
 INFORMATIONS POUR LA SCENE DE COMBAT
+
 	Pendant la phase ennemie, on peut arrêter l'avancée des ennemis en appuyant sur ESPACE/X/ENTREE au bon moment. Cela déclenche une petite séquence de "duel" direct contre la machine. 
 		Si on ne stoppe pas l'ennemi, il va directement attaquer notre Clay God
 	Les autres commandes restent les mêmes que pour l'alpha.
@@ -32,6 +34,7 @@ INFORMATIONS POUR LA SCENE DE COMBAT
 CE QUI A CHANGÉ DEPUIS LA BETA
 
 Scene de Combat :
+
 	Il y a vraiment plusieurs joueurs présents (2 joueurs)
 	Les ennemis visent un Clay God différent de celui du joueur 1
 	Les Clay Gods peuvent maintenant invoquer une unité si le nombre est inférieur à 5 par joueur
@@ -45,4 +48,9 @@ Scene de Combat :
 	
 	
 Ecran Titre:
+
 	Menu Options qui va surtout changer les propriétés graphiques du jeu
+	
+Outils :
+
+	Il y a un outil pour créer des maps un peu plus rapidement, on peut le paramétrer en ajouter des prefabs ou des modèles sur un terrain

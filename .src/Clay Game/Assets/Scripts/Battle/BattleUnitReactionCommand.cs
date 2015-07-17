@@ -22,13 +22,16 @@ public class BattleUnitReactionCommand : MonoBehaviour {
 
     float t = 0;
     float maxT;
+
+    [SerializeField]
+    int player;
+
 	void Start () {
         maxT = confrontationManager.reactionTime;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        //Debug.Log("Battle State " + battleMain.battleState);
         if(TimeCountStarted)
         {
             t += Time.deltaTime;
@@ -53,22 +56,24 @@ public class BattleUnitReactionCommand : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        Debug.Log(col.gameObject.name);
-        Debug.Log(battleMain.battleState);
-        if(battleMain.battleState == BattleMain.Battlestate.enemyTurn)
+        if (player == inputManager.currentPlayer)
         {
-            detectedUnit = col.GetComponent<BattleUnit>();
-            if(detectedUnit.IsEnemy)
+            if (battleMain.battleState == BattleMain.Battlestate.enemyTurn)
             {
-                if(!TimeCountStarted)
+                detectedUnit = col.GetComponent<BattleUnit>();
+                if (detectedUnit.IsEnemy)
                 {
-                    buttonToPressObject.SetActive(true);
-                    TimeCountStarted = true;
-                }
+                    if (!TimeCountStarted)
+                    {
+                        buttonToPressObject.SetActive(true);
+                        TimeCountStarted = true;
+                    }
 
-                    
+
+                }
             }
         }
+        
         
     }
 }

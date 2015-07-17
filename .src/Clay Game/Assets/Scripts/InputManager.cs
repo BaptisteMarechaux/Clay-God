@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour {
+    public int currentPlayer=1;
+
 
 	bool leftDown;
 	public bool LeftDown
@@ -154,6 +156,7 @@ public class InputManager : MonoBehaviour {
 		}
 		set{xDown = value;}
 	}
+
 
 	public IEnumerator Wait(float duration)
 	{

@@ -33,6 +33,31 @@ public class ShopItem{
         get {return itemDescription; }
     }
 
+    public enum itemEffect
+    {
+        HPUp,
+        HPDown,
+        PowUp,
+        ResUp,
+        MovUp,
+        PowDwn,
+        ResDwn,
+
+    }
+
+    public enum itemEffectValue
+    {
+        Percent30,
+        Full,
+        One,
+        Two,
+        Three
+    }
+
+    public itemEffect effect;
+
+    public itemEffectValue effectValue;
+
     public ShopItem(int _id, string _name, int _cost, string _description)
     {
         id = _id;

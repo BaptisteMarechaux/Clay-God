@@ -43,10 +43,10 @@ public class BattleGod : BattleEntity {
             Defeat();
     }
 
-    public void InvokeUnit(BattleUnit UnitType)
+    public void InvokeUnit()
     {
         //Fonction qui va servir à gérer l'invocation d'une unité
-        if (battleMain.PlayerEntities.Count < CountDisponibleUnits())
+        if (battleMain.PlayerEntities.Count < CountDisponibleUnits(battleMain.input.currentPlayer))
         {
             /*
             RaycastHit hit;
@@ -86,13 +86,23 @@ public class BattleGod : BattleEntity {
         
     }
 
-    int CountDisponibleUnits()
+    int CountDisponibleUnits(int player)
     {
         int a=0;
-        for(int i=0;i<battleMain.PlayerEntities.Count;i++)
+        for(int i=0;i<5;i++)
         {
-            if (battleMain.PlayerEntities[i].enabled)
-                a++;
+            if (player == 1)
+            {
+                if (battleMain.PlayerEntities[i].enabled)
+                    a++;
+            }
+
+            if (player == 2)
+            {
+                if (battleMain.Player2Entities[i].enabled)
+                    a++;
+            }
+            
         }
 
         return a;

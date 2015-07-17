@@ -64,4 +64,9 @@ public class OptionsManager : MonoBehaviour {
         optionsCanvas.SetActive(true);
         mainMenuCanvas.SetActive(false);
     }
+
+     public void StartSoloPlay()
+     {
+         Application.LoadLevel("SceneSelectLevelMountain");
+     }
 }

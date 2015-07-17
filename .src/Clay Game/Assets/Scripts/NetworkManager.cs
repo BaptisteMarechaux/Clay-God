@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+
 
 public class NetworkManager : MonoBehaviour {
 	
@@ -17,6 +19,9 @@ public class NetworkManager : MonoBehaviour {
 
     [SerializeField]
     CreateScrollList scrollList;
+
+    [SerializeField]
+    Text nameOfGame;
 
 	void Start()
 	{
@@ -36,6 +41,7 @@ public class NetworkManager : MonoBehaviour {
 			if (!Network.isClient && !Network.isServer) {
 				Network.InitializeSecurity();
 				Network.InitializeServer (nbPlayers, port, !Network.HavePublicAddress ());
+                gameName = nameOfGame.text != "" ? nameOfGame.text : gameName;
 				MasterServer.RegisterHost (typeName, gameName);
 				Debug.Log("Server client connected !");
 			}
