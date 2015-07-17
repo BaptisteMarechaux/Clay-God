@@ -185,7 +185,7 @@ public class BattleMain : MonoBehaviour {
             for (int i = 0; i < EnemyEntities.Count;i++ )
             {
                 //EnemyEntities[i].target = PlayerEntities[Random.Range(0, PlayerEntities.Count - 1)].transform;
-                EnemyEntities[i].target = PlayerGodEntities[Random.Range(0,2)].transform;
+                EnemyEntities[i].target = PlayerGodEntities[Random.Range(0,PlayerGodEntities.Count)].transform;
             }
              
             enemyTurnManager.enabled = true;
