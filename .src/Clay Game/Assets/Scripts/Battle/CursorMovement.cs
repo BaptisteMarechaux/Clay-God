@@ -247,7 +247,6 @@ public class CursorMovement : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col)
 	{
-		Debug.Log("Le Collider : " + col.tag);
 		if(col.tag == "Character")
 		{
             if (battleMain.battleState == BattleMain.Battlestate.waiting)
@@ -445,7 +444,7 @@ public class CursorMovement : MonoBehaviour {
     {
         battleMain.battleState = BattleMain.Battlestate.waiting;
         GodActionButtonsGroup.gameObject.SetActive(false);
-
+        hoverGod.InvokeUnit();
         battleMain.IsTurnEndedForAll();
     }
 

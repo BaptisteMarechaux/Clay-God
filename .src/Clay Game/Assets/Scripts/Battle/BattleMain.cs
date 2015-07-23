@@ -187,6 +187,17 @@ public class BattleMain : MonoBehaviour {
                 //EnemyEntities[i].target = PlayerEntities[Random.Range(0, PlayerEntities.Count - 1)].transform;
                 EnemyEntities[i].target = PlayerGodEntities[Random.Range(0,PlayerGodEntities.Count)].transform;
             }
+
+            for (int i = 0; i < EnemyEntities.Count; i++)
+            {
+                if (!EnemyEntities[i].gameObject.activeSelf)
+                {
+                    EnemyEntities[i].gameObject.SetActive(true);
+                    EnemyEntities[i].ChangeHP(999);
+                    EnemyEntities[i].transform.position = EnemyGodEntities[0].transform.position + Vector3.back;
+                    break;
+                }
+            }
              
             enemyTurnManager.enabled = true;
 
@@ -195,15 +206,11 @@ public class BattleMain : MonoBehaviour {
 
     public void IsTurnEndedForEnemies() //Verifie si le tour de chaque unité est terminé puis lance la phase ennemie en conséquence
     {
-        bool over=false; //vrai si le tour doit etre fini , faux sinon
+        bool over=true; //vrai si le tour doit etre fini , faux sinon
         for (int i = 0; i < EnemyEntities.Count; i++)
         {
             //Verifie si chaque entité du joueur a deja joué son tour
-            if (EnemyEntities[i].TurnEnded && EnemyEntities[i].gameObject.activeSelf)
-            {
-                over = true;
-            }
-            else
+            if (!EnemyEntities[i].TurnEnded && EnemyEntities[i].gameObject.activeSelf)
             {
                 over = false;
             }
@@ -233,6 +240,7 @@ public class BattleMain : MonoBehaviour {
             audioSources[0].gameObject.SetActive(true);
             audioSources[1].gameObject.SetActive(false);
             enemyTurnManager.enabled = false;
+            Debug.Log("ini");
 
         }
     }

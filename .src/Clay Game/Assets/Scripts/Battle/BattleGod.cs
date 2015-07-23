@@ -40,21 +40,43 @@ public class BattleGod : BattleEntity {
         base.ChangeHP(amount);
 
         if (hp <= 0)
+        {
             Defeat();
+            Debug.Log("hp = 0");
+        }
+           
     }
 
     public void InvokeUnit()
     {
         //Fonction qui va servir à gérer l'invocation d'une unité
-        if (battleMain.PlayerEntities.Count < CountDisponibleUnits(battleMain.input.currentPlayer))
+        if (5 > CountDisponibleUnits(battleMain.input.currentPlayer))
         {
-            /*
-            RaycastHit hit;
-            float distanceToGround = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                if (battleMain.input.currentPlayer == 1)
+                {
+                    if (!battleMain.PlayerEntities[i].gameObject.activeSelf)
+                    {
+                        battleMain.PlayerEntities[i].ChangeHP(999);
+                        battleMain.PlayerEntities[i].gameObject.SetActive(true);
+                        battleMain.PlayerEntities[i].transform.position = transform.position + Vector3.back;
+                        break;
+                    }
+                }
 
-            if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F))
-                distanceToGround = hit.distance;
-             */
+                if (battleMain.input.currentPlayer == 2)
+                {
+                    if (!battleMain.Player2Entities[i].gameObject.activeSelf)
+                    {
+                        battleMain.Player2Entities[i].ChangeHP(999);
+                        battleMain.Player2Entities[i].gameObject.SetActive(true);
+                        battleMain.Player2Entities[i].transform.position = transform.position + Vector3.back;
+                        break;
+                    }
+                }
+
+            }
         }
     }
 
@@ -93,13 +115,13 @@ public class BattleGod : BattleEntity {
         {
             if (player == 1)
             {
-                if (battleMain.PlayerEntities[i].enabled)
+                if (battleMain.PlayerEntities[i].gameObject.activeSelf)
                     a++;
             }
 
             if (player == 2)
             {
-                if (battleMain.Player2Entities[i].enabled)
+                if (battleMain.Player2Entities[i].gameObject.activeSelf)
                     a++;
             }
             

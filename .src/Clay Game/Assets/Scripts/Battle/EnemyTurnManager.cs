@@ -45,12 +45,12 @@ public class EnemyTurnManager : MonoBehaviour {
         {
              if(battleMain.EnemyEntities[a].TurnEnded == false)
              {
-                 if (!battleMain.EnemyEntities[a].isActiveAndEnabled)
+                 if (!battleMain.EnemyEntities[a].gameObject.activeSelf)
                  {
                      a++;
                      Move();
-                 }
-                     
+                     return;
+                 }  
                  selectedEnemy = battleMain.EnemyEntities[a];
                  //AttackCheck();
                  selectedEnemy.FindPath();
@@ -81,13 +81,14 @@ public class EnemyTurnManager : MonoBehaviour {
                 }
         if(okAttack)
         {
+            Debug.Log(selectedEnemy.Power);
             selectedEnemy.target.GetComponent<BattleEntity>().ChangeHP(-selectedEnemy.Power);
             okAttack = false;
         }
-        //selectedEnemy.TurnEnded = true;
+        selectedEnemy.TurnEnded = true;
         battleMain.IsTurnEndedForEnemies();
         a++;
-        if(this.gameObject.activeSelf && battleMain.EnemyEntities.Count > a)
+        if(this.enabled && battleMain.EnemyEntities.Count > a)
            Move();
     }
 
