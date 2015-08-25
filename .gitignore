@@ -12,6 +12,8 @@
 *.userprefs
 *.pidb
 *.booproj
+# Video Files
+*.avi
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
