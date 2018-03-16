@@ -1,7 +1,7 @@
-ESGI-3A-DJV-Projet-Annuel
+Clay G
 =========================
 
-Répertoire du projet annuel
+Répertoire du projet
 
 
 COMMANDES DE BASE
